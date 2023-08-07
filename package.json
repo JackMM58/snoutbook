@@ -1,0 +1,21 @@
+{
+  "name": "snoutbook",
+  "private": true,
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "dev:api": "npm run dev -w @snoutbook/api",
+    "migrate": "npm run migrate -w @snoutbook/api",
+    "test": "npm run test --workspaces --if-present"
+  },
+  "devDependencies": {
+    "@types/node": "^20.5.0",
+    "typescript": "^5.1.6",
+    "vitest": "^0.34.3"
+  }
+}
