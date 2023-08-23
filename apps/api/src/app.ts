@@ -1,5 +1,10 @@
 import express, { Router } from 'express';
+import { requireStaff } from './lib/auth';
 import { errorHandler } from './lib/errors';
+import { appointmentsRouter } from './routes/appointments';
+import { authRouter } from './routes/auth';
+import { clientsRouter } from './routes/clients';
+import { publicBookingRouter } from './routes/publicBooking';
 
 export function createApp() {
   const app = express();
@@ -12,7 +17,13 @@ export function createApp() {
     res.json({ ok: true });
   });
 
+  app.use('/api/auth', authRouter);
+  app.use('/api/public', publicBookingRouter);
+
   const dashboard = Router();
+  dashboard.use(requireStaff);
+  dashboard.use('/appointments', appointmentsRouter);
+  dashboard.use('/clients', clientsRouter);
   app.use('/api', dashboard);
 
   app.use(errorHandler);
