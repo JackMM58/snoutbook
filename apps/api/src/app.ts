@@ -5,11 +5,15 @@ import { appointmentsRouter } from './routes/appointments';
 import { authRouter } from './routes/auth';
 import { clientsRouter } from './routes/clients';
 import { publicBookingRouter } from './routes/publicBooking';
+import { twilioWebhookRouter } from './routes/webhooks/twilio';
 
 export function createApp() {
   const app = express();
   app.set('trust proxy', 1);
   app.disable('x-powered-by');
+
+  // Webhooks parse their own bodies, so they're mounted before express.json().
+  app.use('/webhooks/twilio', express.urlencoded({ extended: false }), twilioWebhookRouter);
 
   app.use(express.json({ limit: '1mb' }));
 

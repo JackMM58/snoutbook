@@ -10,6 +10,7 @@
   },
   "scripts": {
     "dev:api": "npm run dev -w @snoutbook/api",
+    "worker": "npm run worker -w @snoutbook/api",
     "migrate": "npm run migrate -w @snoutbook/api",
     "test": "npm run test --workspaces --if-present"
   },
