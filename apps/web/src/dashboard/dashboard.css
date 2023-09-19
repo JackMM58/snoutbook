@@ -1,0 +1,575 @@
+/* Shell */
+
+.dash {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.dash-topbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem 1.5rem;
+  padding: 0.625rem 1rem;
+  background: var(--green-900);
+  color: white;
+}
+
+.dash-topbar .muted {
+  color: rgb(255 255 255 / 0.7);
+}
+
+.dash-brand {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.dash-brand strong {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.dash-brand .muted {
+  font-size: 0.75rem;
+}
+
+.dash-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+  flex: 1 1 auto;
+}
+
+.dash-nav a {
+  padding: 0.375rem 0.75rem;
+  border-radius: var(--radius);
+  color: white;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.dash-nav a.active {
+  background: rgb(255 255 255 / 0.15);
+}
+
+.dash-user {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-width: 0;
+}
+
+.dash-user .btn-ghost {
+  color: white;
+}
+
+.dash-main {
+  flex: 1;
+  width: 100%;
+  max-width: 80rem;
+  margin: 0 auto;
+  padding: 1rem;
+  min-width: 0;
+}
+
+.dash-loading {
+  padding: 2rem;
+}
+
+.page-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.page-header p {
+  margin: 0;
+}
+
+.span-all {
+  grid-column: 1 / -1;
+}
+
+.wrap-anywhere {
+  overflow-wrap: anywhere;
+}
+
+.mono {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 0.8125rem;
+}
+
+.small {
+  font-size: 0.8125rem;
+}
+
+/* Segmented control and tabs */
+
+.segmented-control {
+  display: inline-flex;
+  flex-wrap: wrap;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  overflow: hidden;
+  background: white;
+  margin-bottom: 0.75rem;
+}
+
+.segmented-control button {
+  min-height: 2.5rem;
+  padding: 0.375rem 0.875rem;
+  border: 0;
+  background: none;
+  font: inherit;
+  cursor: pointer;
+}
+
+.segmented-control button[aria-selected='true'] {
+  background: var(--green-700);
+  color: white;
+}
+
+.tabs {
+  display: flex;
+  gap: 0.25rem;
+  margin-bottom: 1rem;
+  border-bottom: 1px solid var(--line);
+  overflow-x: auto;
+}
+
+.tabs a {
+  flex: 0 0 auto;
+  padding: 0.5rem 0.75rem;
+  color: var(--ink-muted);
+  text-decoration: none;
+  font-weight: 600;
+  border-bottom: 2px solid transparent;
+}
+
+.tabs a.active {
+  color: var(--green-700);
+  border-color: var(--green-700);
+}
+
+/* Login */
+
+.login {
+  display: grid;
+  place-items: center;
+  min-height: 100vh;
+  padding: 1rem;
+}
+
+.login-card {
+  display: grid;
+  gap: 0.875rem;
+  width: 100%;
+  max-width: 24rem;
+}
+
+/* Calendar */
+
+.calendar-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0.75rem;
+}
+
+.calendar-toolbar .segmented-control {
+  margin: 0 0 0 auto;
+}
+
+.calendar-title {
+  margin: 0;
+  font-size: 1.25rem;
+  min-width: 0;
+}
+
+.week-filter {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  max-width: 20rem;
+  margin-bottom: 0.75rem;
+}
+
+.calendar-scroll {
+  overflow: auto;
+  max-height: calc(100vh - 11rem);
+  min-height: 20rem;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: white;
+}
+
+.calendar-grid {
+  display: grid;
+  min-width: min-content;
+}
+
+.calendar-corner,
+.calendar-column-head {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  background: white;
+  border-bottom: 1px solid var(--line);
+}
+
+.calendar-column-head {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0.5rem;
+  font-weight: 600;
+  font-size: 0.875rem;
+  border-left: 1px solid var(--line);
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.swatch {
+  flex: 0 0 auto;
+  width: 0.625rem;
+  height: 0.625rem;
+  border-radius: 50%;
+}
+
+.time-gutter {
+  position: relative;
+}
+
+.time-gutter span {
+  position: absolute;
+  right: 0.375rem;
+  transform: translateY(-0.5em);
+  font-size: 0.6875rem;
+  color: var(--ink-muted);
+}
+
+.calendar-column {
+  position: relative;
+  border-left: 1px solid var(--line);
+  background-image: repeating-linear-gradient(
+    to bottom,
+    var(--line) 0,
+    var(--line) 1px,
+    transparent 1px,
+    transparent 60px
+  );
+}
+
+.calendar-column[data-drop-active] {
+  background-color: var(--green-100);
+}
+
+.appt-card {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.125rem;
+  padding: 0.25rem 0.375rem;
+  border: 1px solid var(--line);
+  border-left: 4px solid;
+  border-radius: 6px;
+  background: var(--sand-50);
+  font: inherit;
+  font-size: 0.75rem;
+  text-align: left;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.appt-card[draggable='true'] {
+  cursor: grab;
+}
+
+.appt-card.status-checked_in {
+  background: var(--amber-100);
+}
+
+.appt-card.status-completed {
+  background: var(--green-100);
+}
+
+.appt-card.status-no_show {
+  opacity: 0.7;
+  text-decoration: line-through;
+}
+
+.appt-time {
+  font-weight: 600;
+  color: var(--ink-muted);
+}
+
+.appt-pet {
+  font-weight: 700;
+}
+
+.appt-meta {
+  color: var(--ink-muted);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+  white-space: nowrap;
+}
+
+/* Appointment sheet */
+
+.sheet-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  background: rgb(0 0 0 / 0.35);
+}
+
+.sheet {
+  width: 100%;
+  max-width: 28rem;
+  max-height: 100%;
+  overflow-y: auto;
+  padding: 1rem;
+  border-radius: var(--radius);
+  background: white;
+  box-shadow: var(--shadow);
+}
+
+.sheet-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.detail-list {
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  gap: 0.375rem 1rem;
+  margin: 0.5rem 0 1rem;
+}
+
+.detail-list dt {
+  color: var(--ink-muted);
+}
+
+.detail-list dd {
+  margin: 0;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+/* Pet profile */
+
+.profile-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
+  gap: 1rem;
+  align-items: start;
+}
+
+.profile-grid aside .card + .card {
+  margin-top: 1rem;
+}
+
+.vaccine-list,
+.visit-list,
+.photo-grid {
+  margin: 0 0 1rem;
+  padding: 0;
+  list-style: none;
+}
+
+.vaccine-list li {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.25rem 0.75rem;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.vaccine-type {
+  font-weight: 700;
+  min-width: 6rem;
+}
+
+.vaccine-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-left: auto;
+  min-width: 0;
+}
+
+.vaccine-actions a {
+  overflow-wrap: anywhere;
+}
+
+.visit-list li {
+  display: flex;
+  flex-direction: column;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.photo-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(7rem, 1fr));
+  gap: 0.5rem;
+}
+
+.photo-grid img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 1;
+  object-fit: cover;
+  border-radius: 6px;
+}
+
+.gate-notes {
+  padding: 0.5rem;
+  border-radius: 6px;
+  background: var(--amber-100);
+}
+
+/* Checkout */
+
+.checkout-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 22rem), 1fr));
+  gap: 1rem;
+  align-items: start;
+}
+
+.checkout-grid > div > .card + .card {
+  margin-top: 1rem;
+}
+
+.total-row th,
+.total-row td {
+  font-size: 1.125rem;
+  font-weight: 700;
+  border-bottom: 0;
+}
+
+.pending-payment {
+  padding: 0.75rem;
+  border-radius: var(--radius);
+  background: var(--amber-100);
+}
+
+/* Reports */
+
+.report-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.stat-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 10rem), 1fr));
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.stat {
+  display: flex;
+  flex-direction: column;
+  padding: 0.875rem 1rem;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: white;
+}
+
+.stat-label {
+  font-size: 0.8125rem;
+  color: var(--ink-muted);
+}
+
+.stat-value {
+  font-size: 1.5rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Settings */
+
+.settings .card {
+  max-width: 48rem;
+}
+
+.addon-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem 0.75rem;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.addon-name {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex: 1 1 10rem;
+  min-width: 0;
+}
+
+.addon-price {
+  width: 6.5rem;
+}
+
+.van-row {
+  padding: 0.75rem 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.usage-figure {
+  font-size: 1.125rem;
+}
+
+.meter {
+  height: 0.75rem;
+  border-radius: 999px;
+  background: var(--sand-100);
+  overflow: hidden;
+}
+
+.meter-fill {
+  height: 100%;
+  background: var(--green-700);
+}
+
+@media (max-width: 760px) {
+  .profile-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .calendar-toolbar .segmented-control {
+    margin-left: 0;
+  }
+
+  .calendar-title {
+    flex-basis: 100%;
+    order: -1;
+  }
+
+  .calendar-scroll {
+    max-height: none;
+  }
+}
