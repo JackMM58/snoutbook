@@ -9,6 +9,7 @@
     "worker": "tsx --env-file=../../.env src/worker.ts",
     "worker:prod": "tsx src/worker.ts",
     "migrate": "tsx --env-file=../../.env src/scripts/migrate.ts",
+    "seed": "tsx --env-file=../../.env src/scripts/seed.ts",
     "test": "vitest run"
   },
   "dependencies": {
