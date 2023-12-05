@@ -1,6 +1,8 @@
 import { getPool, type Db } from '../db';
+import { sendEmail } from '../vendors/postmark';
 import { cancelPendingJobs, enqueueJob, type Job } from './jobs';
 import {
+  appointmentReminderEmail,
   appointmentReminderSms,
   type ReminderContext,
 } from './messages';
@@ -77,6 +79,7 @@ interface ReminderRecipient {
   email: string | null;
   businessName: string;
   businessPhone: string | null;
+  businessEmail: string | null;
   timezone: string;
 }
 
@@ -85,7 +88,7 @@ export async function sendAppointmentReminder(job: Job): Promise<void> {
   const payload = job.payload as unknown as ReminderPayload;
   const { rows } = await db.query<ReminderRecipient>(
     `SELECT a.status, c.id AS "clientId", c.first_name AS "firstName", c.phone, c.email,
-            b.name AS "businessName", b.phone AS "businessPhone", b.timezone
+            b.name AS "businessName", b.phone AS "businessPhone", b.email AS "businessEmail", b.timezone
        FROM appointments a
        JOIN clients c ON c.id = a.client_id
        JOIN businesses b ON b.id = a.business_id
@@ -107,7 +110,11 @@ export async function sendAppointmentReminder(job: Job): Promise<void> {
     offsetHours: payload.offsetHours,
   };
 
+  // FIXME: if the email fails after the text went out, the retry sends the text again.
   if (r.phone) {
     await sendSms(db, { businessId: job.businessId, clientId: r.clientId, to: r.phone, body: appointmentReminderSms(ctx), kind: 'reminder' });
+  }
+  if (r.email) {
+    await sendEmail({ to: r.email, ...appointmentReminderEmail(ctx), tag: `reminder-${payload.offsetHours}h`, replyTo: r.businessEmail });
   }
 }

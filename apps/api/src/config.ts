@@ -10,9 +10,15 @@ const schema = z.object({
   // Public URL of this API; Twilio signs requests against it.
   API_BASE_URL: z.string().url(),
 
+  STRIPE_SECRET_KEY: z.string().startsWith('sk_'),
+  STRIPE_WEBHOOK_SECRET: z.string().startsWith('whsec_'),
+
   TWILIO_ACCOUNT_SID: z.string().startsWith('AC'),
   TWILIO_AUTH_TOKEN: z.string().min(1),
   TWILIO_MESSAGING_SERVICE_SID: z.string().startsWith('MG'),
+
+  POSTMARK_SERVER_TOKEN: z.string().min(1),
+  POSTMARK_FROM_EMAIL: z.string().email(),
 
   WORKER_POLL_MS: z.coerce.number().int().positive().default(5000),
   WORKER_BATCH_SIZE: z.coerce.number().int().positive().default(25),

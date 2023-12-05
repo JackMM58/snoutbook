@@ -12,7 +12,8 @@ export interface OutboundSms {
 }
 
 /**
- * Sends one text. Returns false if the client has opted out.
+ * Sends one text and logs it to sms_usage, which is what plan quotas and overage are
+ * counted from. Returns false if the client has opted out.
  */
 export async function sendSms(db: Db, sms: OutboundSms): Promise<boolean> {
   if (sms.clientId) {
@@ -23,6 +24,10 @@ export async function sendSms(db: Db, sms: OutboundSms): Promise<boolean> {
     if (rows[0]?.smsOptOut) return false;
   }
 
-  await sendText(sms.to, sms.body);
+  const sent = await sendText(sms.to, sms.body);
+  await db.query(
+    `INSERT INTO sms_usage (business_id, client_id, kind, twilio_sid, segments) VALUES ($1, $2, $3, $4, $5)`,
+    [sms.businessId, sms.clientId, sms.kind, sent.sid, sent.segments],
+  );
   return true;
 }

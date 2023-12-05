@@ -1,8 +1,9 @@
 import crypto from 'node:crypto';
 import type { Request, RequestHandler } from 'express';
-import type { StaffRole } from '@snoutbook/shared';
+import type { PlanId, StaffRole } from '@snoutbook/shared';
 import { getConfig } from '../config';
-import { HttpError } from './errors';
+import { getPool } from '../db';
+import { handle, HttpError } from './errors';
 
 export interface SessionClaims {
   staffId: string;
@@ -57,6 +58,18 @@ export function requireRole(...roles: StaffRole[]): RequestHandler {
     }
     next();
   };
+}
+
+export function requirePlan(...plans: PlanId[]): RequestHandler {
+  return handle(async (req, _res, next) => {
+    const { rows } = await getPool().query<{ plan: PlanId }>('SELECT plan FROM businesses WHERE id = $1', [
+      auth(req).businessId,
+    ]);
+    if (!rows[0] || !plans.includes(rows[0].plan)) {
+      throw new HttpError(403, 'Not included in your plan', 'plan_required');
+    }
+    next();
+  });
 }
 
 function scrypt(password: string, salt: Buffer): Promise<Buffer> {

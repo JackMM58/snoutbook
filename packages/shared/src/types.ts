@@ -1,6 +1,8 @@
 // Wire types shared by the API and the web app. Timestamps are ISO strings,
 // calendar dates are 'YYYY-MM-DD', money is integer cents.
 
+export type PlanId = 'solo' | 'mobile' | 'salon';
+
 export type Size = 'S' | 'M' | 'L' | 'XL';
 export type SizeTable<T> = Record<Size, T>;
 
@@ -15,6 +17,7 @@ export interface BusinessSummary {
   id: string;
   name: string;
   slug: string;
+  plan: PlanId;
   timezone: string;
   phone: string | null;
 }
@@ -80,4 +83,12 @@ export interface CalendarAppointment extends Appointment {
 export interface AvailabilitySlot {
   startsAt: string;
   groomerId: string;
+}
+
+export interface SmsUsageSummary {
+  month: string;
+  sent: number;
+  quota: number;
+  overage: number;
+  overageCents: number;
 }
