@@ -5,6 +5,8 @@ import { appointmentsRouter } from './routes/appointments';
 import { authRouter } from './routes/auth';
 import { clientsRouter } from './routes/clients';
 import { publicBookingRouter } from './routes/publicBooking';
+import { servicesRouter } from './routes/services';
+import { settingsRouter } from './routes/settings';
 import { staffRouter } from './routes/staff';
 import { twilioWebhookRouter } from './routes/webhooks/twilio';
 
@@ -30,6 +32,8 @@ export function createApp() {
   dashboard.use('/appointments', appointmentsRouter);
   dashboard.use('/clients', clientsRouter);
   dashboard.use('/staff', staffRouter);
+  dashboard.use('/settings', settingsRouter);
+  dashboard.use(servicesRouter);
   app.use('/api', dashboard);
 
   app.use(errorHandler);

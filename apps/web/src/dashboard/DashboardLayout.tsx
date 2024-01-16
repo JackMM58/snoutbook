@@ -25,6 +25,7 @@ export function DashboardLayout() {
           </div>
           <nav className="dash-nav" aria-label="Main">
             <NavLink to="/app/calendar">Calendar</NavLink>
+            {manager && <NavLink to="/app/settings">Settings</NavLink>}
           </nav>
           <div className="dash-user">
             <span className="muted">{session.staff.name}</span>

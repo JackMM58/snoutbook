@@ -22,6 +22,15 @@ export interface BusinessSummary {
   phone: string | null;
 }
 
+export interface BusinessSettings {
+  name: string;
+  phone: string | null;
+  timezone: string;
+  depositCents: number | null;
+  rebookAfterWeeks: number | null;
+  stripeConnected: boolean;
+}
+
 export interface StaffMember {
   id: string;
   name: string;
