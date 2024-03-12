@@ -30,3 +30,43 @@ export function priceRange(service: Pick<Service, 'pricesCents'>): { minCents: n
   const prices = SIZES.map((size) => service.pricesCents[size]);
   return { minCents: Math.min(...prices), maxCents: Math.max(...prices) };
 }
+
+export interface PricedItem {
+  label: string;
+  priceCents: number;
+}
+
+export interface BillInput {
+  service: PricedItem;
+  addOns: PricedItem[];
+  depositPaidCents: number;
+  tipCents: number;
+}
+
+export interface Bill {
+  lines: PricedItem[];
+  subtotalCents: number;
+  depositCreditCents: number;
+  tipCents: number;
+  totalDueCents: number;
+}
+
+export function computeBill(input: BillInput): Bill {
+  const lines = [input.service, ...input.addOns];
+  const subtotalCents = lines.reduce((sum, line) => sum + line.priceCents, 0);
+  // A deposit only reduces what's owed; it never turns into change at checkout.
+  const depositCreditCents = Math.min(Math.max(input.depositPaidCents, 0), subtotalCents);
+  const tipCents = Math.max(0, Math.round(input.tipCents));
+  return {
+    lines,
+    subtotalCents,
+    depositCreditCents,
+    tipCents,
+    totalDueCents: subtotalCents - depositCreditCents + tipCents,
+  };
+}
+
+/** Tip suggestions are a percentage of the services, before any deposit comes off. */
+export function tipFromPercent(subtotalCents: number, percent: number): number {
+  return Math.round((subtotalCents * percent) / 100);
+}

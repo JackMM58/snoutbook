@@ -13,6 +13,11 @@ export type AppointmentStatus = (typeof APPOINTMENT_STATUSES)[number];
 
 export type AppointmentSource = 'online' | 'dashboard';
 
+export type DepositStatus = 'pending' | 'paid' | 'expired' | 'applied';
+
+export type PaymentMethod = 'card_reader' | 'payment_link' | 'cash';
+export type PaymentStatus = 'pending' | 'succeeded' | 'failed' | 'cancelled';
+
 export interface BusinessSummary {
   id: string;
   name: string;

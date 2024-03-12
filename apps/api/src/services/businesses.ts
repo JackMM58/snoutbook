@@ -10,11 +10,15 @@ export interface BusinessRow {
   timezone: string;
   phone: string | null;
   email: string | null;
+  depositCents: number | null;
+  stripeAccountId: string | null;
   stripeCustomerId: string | null;
 }
 
 const COLUMNS = `
   id, name, slug, plan, timezone, phone,
+  deposit_cents AS "depositCents",
+  stripe_account_id AS "stripeAccountId",
   stripe_customer_id AS "stripeCustomerId",
   email`;
 

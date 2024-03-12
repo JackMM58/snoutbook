@@ -1,10 +1,12 @@
 import { Router } from 'express';
 import { z } from 'zod';
 import type { BusinessSettings } from '@snoutbook/shared';
+import { getConfig } from '../config';
 import { getPool } from '../db';
 import { auth, requireRole } from '../lib/auth';
 import { handle, HttpError } from '../lib/errors';
 import { getBusiness, type BusinessRow } from '../services/businesses';
+import { getStripe } from '../vendors/stripe';
 
 export const settingsRouter = Router();
 
@@ -51,5 +53,35 @@ settingsRouter.put(
       [businessId, s.name, s.phone, s.timezone, s.depositCents, s.rebookAfterWeeks],
     );
     res.json({ settings: toSettings(await getBusiness(db, businessId)) });
+  }),
+);
+
+/** Starts (or resumes) Stripe Connect onboarding for the business's own account. */
+settingsRouter.post(
+  '/stripe/connect',
+  requireRole('owner'),
+  handle(async (req, res) => {
+    const db = getPool();
+    const business = await getBusiness(db, auth(req).businessId);
+    const stripe = getStripe();
+    let accountId = business.stripeAccountId;
+    if (!accountId) {
+      const account = await stripe.accounts.create({
+        type: 'standard',
+        email: business.email ?? undefined,
+        business_profile: { name: business.name },
+        metadata: { businessId: business.id },
+      });
+      accountId = account.id;
+      await db.query('UPDATE businesses SET stripe_account_id = $2 WHERE id = $1', [business.id, accountId]);
+    }
+    const appUrl = getConfig().APP_BASE_URL;
+    const link = await stripe.accountLinks.create({
+      account: accountId,
+      type: 'account_onboarding',
+      refresh_url: `${appUrl}/app/settings/business`,
+      return_url: `${appUrl}/app/settings/business?stripe=connected`,
+    });
+    res.json({ url: link.url });
   }),
 );

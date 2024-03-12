@@ -3,11 +3,13 @@ import { requireStaff } from './lib/auth';
 import { errorHandler } from './lib/errors';
 import { appointmentsRouter } from './routes/appointments';
 import { authRouter } from './routes/auth';
+import { checkoutRouter } from './routes/checkout';
 import { clientsRouter } from './routes/clients';
 import { publicBookingRouter } from './routes/publicBooking';
 import { servicesRouter } from './routes/services';
 import { settingsRouter } from './routes/settings';
 import { staffRouter } from './routes/staff';
+import { stripeWebhookRouter } from './routes/webhooks/stripe';
 import { twilioWebhookRouter } from './routes/webhooks/twilio';
 
 export function createApp() {
@@ -16,6 +18,7 @@ export function createApp() {
   app.disable('x-powered-by');
 
   // Webhooks parse their own bodies, so they're mounted before express.json().
+  app.use('/webhooks/stripe', express.raw({ type: 'application/json' }), stripeWebhookRouter);
   app.use('/webhooks/twilio', express.urlencoded({ extended: false }), twilioWebhookRouter);
 
   app.use(express.json({ limit: '1mb' }));
@@ -34,6 +37,7 @@ export function createApp() {
   dashboard.use('/staff', staffRouter);
   dashboard.use('/settings', settingsRouter);
   dashboard.use(servicesRouter);
+  dashboard.use(checkoutRouter);
   app.use('/api', dashboard);
 
   app.use(errorHandler);

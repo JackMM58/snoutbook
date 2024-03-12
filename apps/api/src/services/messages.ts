@@ -1,3 +1,4 @@
+import { formatCents } from '@snoutbook/shared';
 
 export function formatVisitTime(startsAt: Date, timeZone: string): string {
   return new Intl.DateTimeFormat('en-US', {
@@ -54,4 +55,8 @@ export function appointmentReminderEmail(ctx: ReminderContext): { subject: strin
       ctx.businessName,
     ].join('\n'),
   };
+}
+
+export function paymentLinkSms(businessName: string, amountCents: number, url: string): string {
+  return `${businessName}: Your total today is ${formatCents(amountCents)}. Pay here: ${url}`;
 }

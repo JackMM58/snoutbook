@@ -128,10 +128,16 @@ export function DetailsStep({ slug, business, service, pet, slot, groomerName, r
         </div>
       )}
 
+      {business.depositCents ? (
+        <p className="deposit-note">
+          A {formatCents(business.depositCents)} deposit is due now to hold your spot. It comes off your bill on the day.
+        </p>
+      ) : null}
+
       <ErrorNote error={error} />
       <div className="form-actions">
         <Button type="submit" disabled={busy}>
-          Book appointment
+          {business.depositCents ? `Pay ${formatCents(business.depositCents)} deposit and book` : 'Book appointment'}
         </Button>
       </div>
     </form>

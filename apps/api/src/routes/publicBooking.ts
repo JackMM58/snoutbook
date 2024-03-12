@@ -2,12 +2,14 @@ import { Router } from 'express';
 import type { PoolClient } from 'pg';
 import { z } from 'zod';
 import { PLANS, sizeForWeight, zonedParts, type Service } from '@snoutbook/shared';
+import { getConfig } from '../config';
 import { getPool, withTransaction } from '../db';
 import { handle, HttpError, notFound } from '../lib/errors';
 import { toE164 } from '../lib/phone';
 import { createAppointment } from '../services/appointments';
 import { findAvailability } from '../services/availability';
 import { getBusinessBySlug, type BusinessRow } from '../services/businesses';
+import { createDepositCheckout } from '../services/deposits';
 
 export const publicBookingRouter = Router();
 
@@ -40,6 +42,7 @@ publicBookingRouter.get(
         plan: business.plan,
         timezone: business.timezone,
         phone: business.phone,
+        depositCents: business.stripeAccountId ? business.depositCents : null,
       },
       services,
       groomers,
@@ -181,9 +184,21 @@ publicBookingRouter.post(
       return { appointment, petName: pet.name };
     });
 
+    let checkoutUrl: string | null = null;
+    if (business.depositCents && business.stripeAccountId) {
+      checkoutUrl = await createDepositCheckout(getPool(), business, {
+        appointmentId: booking.appointment.id,
+        petName: booking.petName,
+        startsAt,
+        clientEmail: body.client.email,
+        returnUrl: `${getConfig().APP_BASE_URL}/book/${business.slug}/confirmed`,
+      });
+    }
+
     res.status(201).json({
       appointmentId: booking.appointment.id,
       startsAt: booking.appointment.startsAt,
+      checkoutUrl,
     });
   }),
 );

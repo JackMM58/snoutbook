@@ -20,6 +20,15 @@ export function BusinessSettings() {
   if (error) return <ErrorNote error={error} />;
   if (!form) return <Loading />;
 
+  async function connectStripe() {
+    try {
+      const { url } = await api<{ url: string }>('/settings/stripe/connect', { method: 'POST' });
+      window.location.assign(url);
+    } catch (err) {
+      setSaveError((err as Error).message);
+    }
+  }
+
   async function save(e: FormEvent) {
     e.preventDefault();
     if (!form) return;
@@ -63,6 +72,9 @@ export function BusinessSettings() {
               )}
             </select>
           </Field>
+          <Field
+            label="Online booking deposit"
+            hint={form.stripeConnected ? 'Leave blank for no deposit. Taken off the final bill.' : 'Connect Stripe to take deposits.'}
           >
             <input
               inputMode="decimal"
@@ -80,6 +92,17 @@ export function BusinessSettings() {
             </div>
           </div>
         </form>
+      </Card>
+
+      <Card title="Payments">
+        {form.stripeConnected ? (
+          <p>Stripe is connected. Deposits and card payments go straight to your Stripe account.</p>
+        ) : (
+          <>
+            <p className="muted">Connect a Stripe account to take deposits, payment links and card reader payments.</p>
+            <Button onClick={connectStripe}>Connect Stripe</Button>
+          </>
+        )}
       </Card>
 
     </>

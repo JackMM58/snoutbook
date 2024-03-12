@@ -2,6 +2,13 @@
 
 Customer-facing changes, newest first. Dates are when a release reached every account.
 
+## 2024.03 — 2024-03-12
+
+### Added
+- **Deposits**: ask for a fixed deposit when clients book online. It's paid through Stripe Checkout and comes off the final bill.
+- **Checkout** with tips. Text the client a payment link, or record cash.
+- Connect your own Stripe account. Card payments go straight to you at Stripe's standard rate.
+
 ## 1.0 — 2024-01-16
 
 Public launch.
