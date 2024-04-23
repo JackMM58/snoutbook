@@ -43,6 +43,7 @@ publicBookingRouter.get(
         timezone: business.timezone,
         phone: business.phone,
         depositCents: business.stripeAccountId ? business.depositCents : null,
+        collectsAddress: plan.serviceArea,
       },
       services,
       groomers,
@@ -104,6 +105,16 @@ const bookingBody = z.object({
     lastName: z.string().trim().max(80).default(''),
     phone: z.string().min(7),
     email: z.string().email(),
+    address: z
+      .object({
+        line1: z.string().trim().min(1).max(200),
+        line2: z.string().trim().max(200).optional(),
+        city: z.string().trim().min(1).max(100),
+        state: z.string().trim().length(2).transform((s) => s.toUpperCase()),
+        zip: z.string().regex(/^\d{5}$/),
+      })
+      .optional(),
+    gateNotes: z.string().trim().max(500).optional(),
   }),
   pet: z.union([
     z.object({ id: uuid }),
@@ -118,11 +129,30 @@ type BookingBody = z.infer<typeof bookingBody>;
 
 async function upsertClient(tx: PoolClient, businessId: string, phone: string, c: BookingBody['client']): Promise<string> {
   const { rows } = await tx.query<{ id: string }>(
-    `INSERT INTO clients (business_id, first_name, last_name, phone, email)
-     VALUES ($1, $2, $3, $4, $5)
-     ON CONFLICT (business_id, phone) DO UPDATE SET email = COALESCE(clients.email, EXCLUDED.email)
+    `INSERT INTO clients (business_id, first_name, last_name, phone, email, address_line1, address_line2, city, state, zip, gate_notes)
+     VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)
+     ON CONFLICT (business_id, phone) DO UPDATE SET
+       email = COALESCE(clients.email, EXCLUDED.email),
+       address_line1 = COALESCE(EXCLUDED.address_line1, clients.address_line1),
+       address_line2 = COALESCE(EXCLUDED.address_line2, clients.address_line2),
+       city = COALESCE(EXCLUDED.city, clients.city),
+       state = COALESCE(EXCLUDED.state, clients.state),
+       zip = COALESCE(EXCLUDED.zip, clients.zip),
+       gate_notes = COALESCE(EXCLUDED.gate_notes, clients.gate_notes)
      RETURNING id`,
-    [businessId, c.firstName, c.lastName, phone, c.email.toLowerCase()],
+    [
+      businessId,
+      c.firstName,
+      c.lastName,
+      phone,
+      c.email.toLowerCase(),
+      c.address?.line1 ?? null,
+      c.address?.line2 ?? null,
+      c.address?.city ?? null,
+      c.address?.state ?? null,
+      c.address?.zip ?? null,
+      c.gateNotes ?? null,
+    ],
   );
   return rows[0]!.id;
 }
@@ -144,6 +174,17 @@ async function resolvePet(tx: PoolClient, businessId: string, clientId: string, 
   return rows[0]!;
 }
 
+async function assertInServiceArea(business: BusinessRow, zip: string | undefined) {
+  if (!zip) throw new HttpError(400, 'Please enter the address for the visit', 'address_required');
+  const { rows } = await getPool().query('SELECT 1 FROM service_area_zips WHERE business_id = $1 AND zip = $2', [
+    business.id,
+    zip,
+  ]);
+  if (rows.length === 0) {
+    throw new HttpError(422, `Sorry, ${business.name} doesn't come out to ${zip} yet.`, 'outside_service_area');
+  }
+}
+
 publicBookingRouter.post(
   '/:slug/bookings',
   handle(async (req, res) => {
@@ -152,6 +193,7 @@ publicBookingRouter.post(
     const plan = PLANS[business.plan];
     const phone = toE164(body.client.phone);
     if (!phone) throw new HttpError(400, 'Please enter a US mobile number', 'bad_phone');
+    if (plan.serviceArea) await assertInServiceArea(business, body.client.address?.zip);
     if (!plan.groomerColumns && body.groomerId !== 'any') {
       throw new HttpError(400, 'Groomer choice is not available for this business');
     }

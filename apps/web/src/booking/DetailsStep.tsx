@@ -128,6 +128,32 @@ export function DetailsStep({ slug, business, service, pet, slot, groomerName, r
         </div>
       )}
 
+      {business.collectsAddress && (
+        <fieldset className="address">
+          <legend>Where should we park the van?</legend>
+          <div className="form-grid">
+            <Field label="Street address">
+              <input autoComplete="address-line1" value={address.line1} onChange={setAddr('line1')} required />
+            </Field>
+            <Field label="Apt, unit" hint="Optional">
+              <input autoComplete="address-line2" value={address.line2} onChange={setAddr('line2')} />
+            </Field>
+            <Field label="City">
+              <input autoComplete="address-level2" value={address.city} onChange={setAddr('city')} required />
+            </Field>
+            <Field label="State">
+              <input autoComplete="address-level1" maxLength={2} value={address.state} onChange={setAddr('state')} required />
+            </Field>
+            <Field label="ZIP">
+              <input autoComplete="postal-code" inputMode="numeric" maxLength={5} value={address.zip} onChange={setAddr('zip')} required />
+            </Field>
+          </div>
+          <Field label="Gate code or parking notes" hint="Optional">
+            <textarea value={gateNotes} onChange={(e) => setGateNotes(e.target.value)} maxLength={500} />
+          </Field>
+        </fieldset>
+      )}
+
       {business.depositCents ? (
         <p className="deposit-note">
           A {formatCents(business.depositCents)} deposit is due now to hold your spot. It comes off your bill on the day.

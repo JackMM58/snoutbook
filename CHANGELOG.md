@@ -2,6 +2,14 @@
 
 Customer-facing changes, newest first. Dates are when a release reached every account.
 
+## 2024.04 — 2024-04-23
+
+### Added
+- **Mobile plan** ($59/mo, up to 2 vans, 600 texts a month).
+- Service-area ZIP codes. Mobile booking pages ask for the client's address and only accept ZIPs in your list.
+- Client address and gate/parking notes, shown on the pet profile and in the calendar feed.
+- **Buffer minutes** per van, kept free before and after each appointment for driving and setup.
+
 ## 2024.03 — 2024-03-12
 
 ### Added

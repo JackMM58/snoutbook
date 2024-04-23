@@ -9,7 +9,8 @@ import { toE164 } from '../lib/phone';
 export const clientsRouter = Router();
 
 const CLIENT_COLUMNS = `id, first_name AS "firstName", last_name AS "lastName", phone, email,
-  sms_opt_out AS "smsOptOut"`;
+  address_line1 AS "addressLine1", address_line2 AS "addressLine2", city, state, zip,
+  gate_notes AS "gateNotes", sms_opt_out AS "smsOptOut"`;
 
 clientsRouter.get(
   '/',
@@ -55,6 +56,12 @@ const clientBody = z.object({
   lastName: z.string().trim().max(80).default(''),
   phone: z.string().nullable().default(null),
   email: z.string().email().nullable().default(null),
+  addressLine1: z.string().trim().max(200).nullable().default(null),
+  addressLine2: z.string().trim().max(200).nullable().default(null),
+  city: z.string().trim().max(100).nullable().default(null),
+  state: z.string().trim().length(2).nullable().default(null),
+  zip: z.string().regex(/^\d{5}$/).nullable().default(null),
+  gateNotes: z.string().trim().max(500).nullable().default(null),
 });
 
 function normalisePhone(phone: string | null): string | null {
@@ -70,10 +77,10 @@ clientsRouter.post(
     const { businessId } = auth(req);
     const c = clientBody.parse(req.body);
     const { rows } = await getPool().query<Client>(
-      `INSERT INTO clients (business_id, first_name, last_name, phone, email)
-       VALUES ($1, $2, $3, $4, $5)
+      `INSERT INTO clients (business_id, first_name, last_name, phone, email, address_line1, address_line2, city, state, zip, gate_notes)
+       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)
        RETURNING ${CLIENT_COLUMNS}`,
-      [businessId, c.firstName, c.lastName, normalisePhone(c.phone), c.email],
+      [businessId, c.firstName, c.lastName, normalisePhone(c.phone), c.email, c.addressLine1, c.addressLine2, c.city, c.state, c.zip, c.gateNotes],
     );
     res.status(201).json({ client: rows[0] });
   }),
@@ -85,10 +92,11 @@ clientsRouter.patch(
     const { businessId } = auth(req);
     const c = clientBody.parse(req.body);
     const { rows } = await getPool().query<Client>(
-      `UPDATE clients SET first_name = $3, last_name = $4, phone = $5, email = $6
+      `UPDATE clients SET first_name = $3, last_name = $4, phone = $5, email = $6, address_line1 = $7,
+              address_line2 = $8, city = $9, state = $10, zip = $11, gate_notes = $12
         WHERE id = $1 AND business_id = $2
         RETURNING ${CLIENT_COLUMNS}`,
-      [req.params.id, businessId, c.firstName, c.lastName, normalisePhone(c.phone), c.email],
+      [req.params.id, businessId, c.firstName, c.lastName, normalisePhone(c.phone), c.email, c.addressLine1, c.addressLine2, c.city, c.state, c.zip, c.gateNotes],
     );
     if (!rows[0]) throw notFound('Client');
     res.json({ client: rows[0] });

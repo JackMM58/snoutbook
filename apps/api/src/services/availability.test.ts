@@ -19,6 +19,7 @@ const base = {
   workingHours: [window('09:00', '12:00')],
   busy: [],
   durationMinutes: 60,
+  bufferMinutes: 0,
   stepMinutes: 30,
   notBefore: 0,
 };
@@ -31,6 +32,17 @@ describe('computeSlots', () => {
   it('skips times that overlap an existing appointment', () => {
     const slots = computeSlots({ ...base, busy: [window('10:00', '11:00')] });
     expect(times(slots)).toEqual(['09:00', '11:00']);
+  });
+
+  it('keeps the buffer clear on both sides of an appointment', () => {
+    const slots = computeSlots({
+      ...base,
+      workingHours: [window('09:00', '13:00')],
+      busy: [window('10:00', '11:00')],
+      bufferMinutes: 15,
+      stepMinutes: 15,
+    });
+    expect(times(slots)).toEqual(['11:15', '11:30', '11:45', '12:00']);
   });
 
   it('handles split shifts', () => {

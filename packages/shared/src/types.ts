@@ -52,6 +52,12 @@ export interface Client {
   lastName: string;
   phone: string | null;
   email: string | null;
+  addressLine1: string | null;
+  addressLine2: string | null;
+  city: string | null;
+  state: string | null;
+  zip: string | null;
+  gateNotes: string | null;
   smsOptOut: boolean;
 }
 
@@ -79,6 +85,7 @@ export interface Appointment {
   petId: string;
   serviceId: string;
   groomerId: string;
+  vanId: string | null;
   startsAt: string;
   endsAt: string;
   status: AppointmentStatus;
@@ -97,6 +104,13 @@ export interface CalendarAppointment extends Appointment {
 export interface AvailabilitySlot {
   startsAt: string;
   groomerId: string;
+}
+
+export interface Van {
+  id: string;
+  name: string;
+  staffId: string | null;
+  bufferMinutes: number;
 }
 
 export interface SmsUsageSummary {
