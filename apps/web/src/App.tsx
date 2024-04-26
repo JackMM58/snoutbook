@@ -6,6 +6,7 @@ import { CheckoutPage } from './dashboard/checkout/CheckoutPage';
 import { DashboardLayout } from './dashboard/DashboardLayout';
 import { LoginPage } from './dashboard/LoginPage';
 import { BusinessSettings } from './dashboard/settings/BusinessSettings';
+import { ServiceAreaSettings } from './dashboard/settings/ServiceAreaSettings';
 import { ServicesSettings } from './dashboard/settings/ServicesSettings';
 import { SettingsPage } from './dashboard/settings/SettingsPage';
 
@@ -24,6 +25,7 @@ export function App() {
           <Route index element={<Navigate to="business" replace />} />
           <Route path="business" element={<BusinessSettings />} />
           <Route path="services" element={<ServicesSettings />} />
+          <Route path="service-area" element={<ServiceAreaSettings />} />
         </Route>
       </Route>
       <Route path="*" element={<Navigate to="/app" replace />} />
