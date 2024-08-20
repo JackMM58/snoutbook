@@ -13,6 +13,10 @@ export type AppointmentStatus = (typeof APPOINTMENT_STATUSES)[number];
 
 export type AppointmentSource = 'online' | 'dashboard';
 
+export type CoatType = 'short' | 'double' | 'curly' | 'wire' | 'long' | 'combination';
+
+export type VaccineType = 'rabies' | 'dhpp' | 'bordetella';
+
 export type DepositStatus = 'pending' | 'paid' | 'expired' | 'applied';
 
 export type PaymentMethod = 'card_reader' | 'payment_link' | 'cash';
@@ -67,7 +71,25 @@ export interface Pet {
   name: string;
   breed: string | null;
   weightLbs: number | null;
+  coatType: CoatType | null;
+  birthday: string | null;
   temperamentNotes: string | null;
+}
+
+export interface PetPhoto {
+  id: string;
+  url: string;
+  caption: string | null;
+  uploadedAt: string;
+}
+
+export interface VaccineRecord {
+  id: string;
+  petId: string;
+  type: VaccineType;
+  expiresOn: string;
+  fileName: string | null;
+  fileUrl: string | null;
 }
 
 export interface Service {

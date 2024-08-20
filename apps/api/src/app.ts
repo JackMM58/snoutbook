@@ -5,6 +5,7 @@ import { appointmentsRouter } from './routes/appointments';
 import { authRouter } from './routes/auth';
 import { checkoutRouter } from './routes/checkout';
 import { clientsRouter } from './routes/clients';
+import { petsRouter } from './routes/pets';
 import { publicBookingRouter } from './routes/publicBooking';
 import { servicesRouter } from './routes/services';
 import { settingsRouter } from './routes/settings';
@@ -37,6 +38,7 @@ export function createApp() {
   dashboard.use('/staff', staffRouter);
   dashboard.use('/settings', settingsRouter);
   dashboard.use(servicesRouter);
+  dashboard.use(petsRouter);
   dashboard.use(checkoutRouter);
   app.use('/api', dashboard);
 

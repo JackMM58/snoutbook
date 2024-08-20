@@ -2,6 +2,12 @@
 
 Customer-facing changes, newest first. Dates are when a release reached every account.
 
+## 2024.08 — 2024-08-20
+
+### Added
+- **Pet profiles v2**: coat type, birthday, and photos you take at the table.
+- **Vaccine records** for rabies, DHPP and bordetella with expiry dates and an uploaded certificate. Expired records show a red "Expired" badge on the pet profile.
+
 ## 2024.04 — 2024-04-23
 
 ### Added

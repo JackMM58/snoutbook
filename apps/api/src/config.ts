@@ -20,6 +20,12 @@ const schema = z.object({
   POSTMARK_SERVER_TOKEN: z.string().min(1),
   POSTMARK_FROM_EMAIL: z.string().email(),
 
+  S3_BUCKET: z.string().min(1),
+  S3_REGION: z.string().default('us-west-2'),
+  S3_ENDPOINT: z.string().url().optional(),
+  S3_ACCESS_KEY_ID: z.string().min(1),
+  S3_SECRET_ACCESS_KEY: z.string().min(1),
+
   WORKER_POLL_MS: z.coerce.number().int().positive().default(5000),
   WORKER_BATCH_SIZE: z.coerce.number().int().positive().default(25),
 });

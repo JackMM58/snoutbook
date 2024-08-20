@@ -5,6 +5,7 @@ import { CalendarPage } from './dashboard/calendar/CalendarPage';
 import { CheckoutPage } from './dashboard/checkout/CheckoutPage';
 import { DashboardLayout } from './dashboard/DashboardLayout';
 import { LoginPage } from './dashboard/LoginPage';
+import { PetProfilePage } from './dashboard/pets/PetProfilePage';
 import { BusinessSettings } from './dashboard/settings/BusinessSettings';
 import { ServiceAreaSettings } from './dashboard/settings/ServiceAreaSettings';
 import { ServicesSettings } from './dashboard/settings/ServicesSettings';
@@ -20,6 +21,7 @@ export function App() {
       <Route path="/app" element={<DashboardLayout />}>
         <Route index element={<Navigate to="calendar" replace />} />
         <Route path="calendar" element={<CalendarPage />} />
+        <Route path="pets/:petId" element={<PetProfilePage />} />
         <Route path="checkout/:appointmentId" element={<CheckoutPage />} />
         <Route path="settings" element={<SettingsPage />}>
           <Route index element={<Navigate to="business" replace />} />
