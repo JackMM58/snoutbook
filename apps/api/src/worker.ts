@@ -2,10 +2,11 @@ import { setTimeout as sleep } from 'node:timers/promises';
 import { getConfig } from './config';
 import { closePool } from './db';
 import { claimDueJobs, completeJob, failJob, type Job, type JobKind } from './services/jobs';
-import { sendAppointmentReminder } from './services/reminders';
+import { sendAppointmentReminder, sendRebookReminder } from './services/reminders';
 
 const handlers: Record<JobKind, (job: Job) => Promise<void>> = {
   appointment_reminder: sendAppointmentReminder,
+  rebook_reminder: sendRebookReminder,
 };
 
 let stopping = false;

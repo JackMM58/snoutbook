@@ -57,6 +57,32 @@ export function appointmentReminderEmail(ctx: ReminderContext): { subject: strin
   };
 }
 
+export interface RebookContext {
+  businessName: string;
+  clientFirstName: string;
+  petName: string;
+  weeks: number;
+  bookingUrl: string;
+}
+
+export function rebookReminderSms(ctx: RebookContext): string {
+  return `${ctx.businessName}: It's been ${ctx.weeks} weeks since ${ctx.petName}'s last groom. Book the next one: ${ctx.bookingUrl} Reply STOP to opt out.`;
+}
+
+export function rebookReminderEmail(ctx: RebookContext): { subject: string; textBody: string } {
+  return {
+    subject: `Time for ${ctx.petName}'s next groom?`,
+    textBody: [
+      `Hi ${ctx.clientFirstName},`,
+      '',
+      `It's been ${ctx.weeks} weeks since ${ctx.petName}'s last visit. You can book the next one here:`,
+      ctx.bookingUrl,
+      '',
+      ctx.businessName,
+    ].join('\n'),
+  };
+}
+
 export function paymentLinkSms(businessName: string, amountCents: number, url: string): string {
   return `${businessName}: Your total today is ${formatCents(amountCents)}. Pay here: ${url}`;
 }

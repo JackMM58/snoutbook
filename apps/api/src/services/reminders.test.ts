@@ -1,6 +1,6 @@
 import { describe, expect, it, vi } from 'vitest';
 import type { Db } from '../db';
-import { cancelPendingReminders, reminderRunTimes, scheduleAppointmentReminders } from './reminders';
+import { cancelPendingReminders, rebookRunAt, reminderRunTimes, scheduleAppointmentReminders } from './reminders';
 
 const HOUR = 3_600_000;
 
@@ -81,5 +81,12 @@ describe('cancelPendingReminders', () => {
     await cancelPendingReminders(db, 'appt-1');
     expect(calls[0]!.sql).toMatch(/status = 'pending'/);
     expect(calls[0]!.params).toEqual(['appt-1', ['appointment_reminder']]);
+  });
+});
+
+describe('rebookRunAt', () => {
+  it('defaults to six weeks after the visit', () => {
+    const completedAt = new Date('2026-03-03T18:30:00Z');
+    expect(rebookRunAt(completedAt, 6)).toEqual(new Date('2026-04-14T18:30:00Z'));
   });
 });

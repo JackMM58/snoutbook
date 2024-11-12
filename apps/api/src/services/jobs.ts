@@ -1,6 +1,6 @@
 import { getPool, type Db } from '../db';
 
-export type JobKind = 'appointment_reminder';
+export type JobKind = 'appointment_reminder' | 'rebook_reminder';
 
 export interface Job {
   id: number;

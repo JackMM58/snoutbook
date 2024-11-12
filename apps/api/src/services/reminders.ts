@@ -1,9 +1,12 @@
+import { getConfig } from '../config';
 import { getPool, type Db } from '../db';
 import { sendEmail } from '../vendors/postmark';
 import { cancelPendingJobs, enqueueJob, type Job } from './jobs';
 import {
   appointmentReminderEmail,
   appointmentReminderSms,
+  rebookReminderEmail,
+  rebookReminderSms,
   type ReminderContext,
 } from './messages';
 import { sendSms } from './sms';
@@ -26,6 +29,11 @@ export function reminderRunTimes(startsAt: Date, now: Date = new Date()): { offs
     offsetHours,
     runAt: new Date(startsAt.getTime() - offsetHours * HOUR),
   })).filter(({ runAt }) => runAt.getTime() > now.getTime());
+}
+
+/** Lands at the same time of day as the visit, which keeps it inside business hours. */
+export function rebookRunAt(completedAt: Date, weeks: number): Date {
+  return new Date(completedAt.getTime() + weeks * 7 * 24 * HOUR);
 }
 
 interface ReminderTarget {
@@ -67,6 +75,32 @@ export async function scheduleAppointmentReminders(db: Db, appt: ReminderTarget,
 
 export async function cancelPendingReminders(db: Db, appointmentId: string): Promise<number> {
   return cancelPendingJobs(db, appointmentId, ['appointment_reminder']);
+}
+
+interface CompletedVisit {
+  id: string;
+  businessId: string;
+  clientId: string;
+  petId: string;
+  completedAt: Date;
+}
+
+export async function scheduleRebookReminder(db: Db, visit: CompletedVisit, weeks: number | null): Promise<void> {
+  if (!weeks) return;
+  // One pending rebook reminder per pet; the latest visit replaces any earlier one.
+  await db.query(
+    `UPDATE scheduled_jobs SET status = 'cancelled', updated_at = now()
+      WHERE kind = 'rebook_reminder' AND status = 'pending' AND client_id = $1 AND payload->>'petId' = $2`,
+    [visit.clientId, visit.petId],
+  );
+  await enqueueJob(db, {
+    businessId: visit.businessId,
+    kind: 'rebook_reminder',
+    appointmentId: visit.id,
+    clientId: visit.clientId,
+    runAt: rebookRunAt(visit.completedAt, weeks),
+    payload: { petId: visit.petId, weeks },
+  });
 }
 
 // Worker handlers
@@ -116,5 +150,36 @@ export async function sendAppointmentReminder(job: Job): Promise<void> {
   }
   if (r.email) {
     await sendEmail({ to: r.email, ...appointmentReminderEmail(ctx), tag: `reminder-${payload.offsetHours}h`, replyTo: r.businessEmail });
+  }
+}
+
+export async function sendRebookReminder(job: Job): Promise<void> {
+  const db = getPool();
+  const { petId, weeks } = job.payload as { petId: string; weeks: number };
+
+  const { rows } = await db.query<ReminderRecipient & { petName: string; slug: string }>(
+    `SELECT c.id AS "clientId", c.first_name AS "firstName", c.phone, c.email, p.name AS "petName",
+            b.name AS "businessName", b.email AS "businessEmail", b.slug
+       FROM pets p
+       JOIN clients c ON c.id = p.client_id
+       JOIN businesses b ON b.id = p.business_id
+      WHERE p.id = $1`,
+    [petId],
+  );
+  const r = rows[0];
+  if (!r) return;
+
+  const ctx = {
+    businessName: r.businessName,
+    clientFirstName: r.firstName,
+    petName: r.petName,
+    weeks,
+    bookingUrl: `${getConfig().APP_BASE_URL}/book/${r.slug}`,
+  };
+  if (r.phone) {
+    await sendSms(db, { businessId: job.businessId, clientId: r.clientId, to: r.phone, body: rebookReminderSms(ctx), kind: 'rebook' });
+  }
+  if (r.email) {
+    await sendEmail({ to: r.email, ...rebookReminderEmail(ctx), tag: 'rebook', replyTo: r.businessEmail });
   }
 }

@@ -84,6 +84,15 @@ export function BusinessSettings() {
               onChange={(e) => setDeposit(e.target.value)}
             />
           </Field>
+          <Field label="Rebook reminder" hint="Weeks after a visit. Leave blank to turn off.">
+            <input
+              type="number"
+              min={1}
+              max={26}
+              value={form.rebookAfterWeeks ?? ''}
+              onChange={(e) => setForm({ ...form, rebookAfterWeeks: e.target.value ? Number(e.target.value) : null })}
+            />
+          </Field>
           <div className="span-all">
             <ErrorNote error={saveError} />
             <div className="btn-row">

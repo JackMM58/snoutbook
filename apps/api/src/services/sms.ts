@@ -1,7 +1,7 @@
 import type { Db } from '../db';
 import { sendText } from '../vendors/twilio';
 
-export type SmsKind = 'reminder' | 'payment_link';
+export type SmsKind = 'reminder' | 'rebook' | 'payment_link';
 
 export interface OutboundSms {
   businessId: string;

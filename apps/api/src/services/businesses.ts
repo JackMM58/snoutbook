@@ -11,6 +11,7 @@ export interface BusinessRow {
   phone: string | null;
   email: string | null;
   depositCents: number | null;
+  rebookAfterWeeks: number | null;
   stripeAccountId: string | null;
   stripeCustomerId: string | null;
 }
@@ -18,6 +19,7 @@ export interface BusinessRow {
 const COLUMNS = `
   id, name, slug, plan, timezone, phone,
   deposit_cents AS "depositCents",
+  rebook_after_weeks AS "rebookAfterWeeks",
   stripe_account_id AS "stripeAccountId",
   stripe_customer_id AS "stripeCustomerId",
   email`;

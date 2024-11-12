@@ -2,6 +2,11 @@
 
 Customer-facing changes, newest first. Dates are when a release reached every account.
 
+## 2024.11 — 2024-11-12
+
+### Added
+- **Rebook reminders**: a text and email 6 weeks after a completed visit with a link back to your booking page. Change the interval or turn them off in Settings → Business.
+
 ## 2024.08 — 2024-08-20
 
 ### Added
