@@ -157,6 +157,12 @@ export async function sendRebookReminder(job: Job): Promise<void> {
   const db = getPool();
   const { petId, weeks } = job.payload as { petId: string; weeks: number };
 
+  const { rows: upcoming } = await db.query(
+    `SELECT 1 FROM appointments WHERE pet_id = $1 AND starts_at > now() AND status IN ('booked', 'checked_in') LIMIT 1`,
+    [petId],
+  );
+  if (upcoming.length > 0) return;
+
   const { rows } = await db.query<ReminderRecipient & { petName: string; slug: string }>(
     `SELECT c.id AS "clientId", c.first_name AS "firstName", c.phone, c.email, p.name AS "petName",
             b.name AS "businessName", b.email AS "businessEmail", b.slug
