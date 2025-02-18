@@ -2,6 +2,11 @@
 
 Customer-facing changes, newest first. Dates are when a release reached every account.
 
+## 2025.02 — 2025-02-18
+
+### Added
+- **Reports** on the Salon plan: revenue by day, week or month, rebook rate, and no-show count.
+
 ## 2024.11 — 2024-11-12
 
 ### Added

@@ -142,3 +142,22 @@ export interface SmsUsageSummary {
   overage: number;
   overageCents: number;
 }
+
+export type ReportGranularity = 'day' | 'week' | 'month';
+
+export interface RevenuePoint {
+  period: string;
+  revenueCents: number;
+  tipsCents: number;
+}
+
+export interface SalonReport {
+  from: string;
+  to: string;
+  granularity: ReportGranularity;
+  revenue: RevenuePoint[];
+  totalRevenueCents: number;
+  completedCount: number;
+  rebookRate: number | null;
+  noShowCount: number;
+}
