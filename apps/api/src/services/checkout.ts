@@ -196,6 +196,44 @@ export async function sendPaymentLink(db: Db, req: PaymentRequest): Promise<{ ur
   return { url: session.url! };
 }
 
+/** Readers are registered in the business's own Stripe Dashboard and show up here. */
+export async function listCardReaders(business: BusinessRow): Promise<{ id: string; label: string; status: string | null }[]> {
+  const account = requireStripe(business);
+  const location = business.stripeTerminalLocationId ?? undefined;
+  const readers = await getStripe().terminal.readers.list({ location, limit: 20 }, onAccount(account));
+  return readers.data.map((r) => ({ id: r.id, label: r.label ?? r.id, status: r.status }));
+}
+
+/** Pushes the balance to a Stripe Terminal reader. The webhook finalises it. */
+export async function startReaderPayment(db: Db, req: PaymentRequest & { readerId: string }): Promise<{ paymentId: string }> {
+  const business = await getBusiness(db, req.businessId);
+  const account = requireStripe(business);
+  const { bill } = await prepare(db, req);
+  if (bill.totalDueCents === 0) throw new HttpError(409, 'Nothing left to pay — record it as cash instead');
+
+  const { rows } = await db.query<{ id: string }>(
+    `INSERT INTO payments (business_id, appointment_id, method, amount_cents, tip_cents, recorded_by, stripe_reader_id)
+     VALUES ($1, $2, 'card_reader', $3, $4, $5, $6) RETURNING id`,
+    [req.businessId, req.appointmentId, bill.totalDueCents - bill.tipCents, bill.tipCents, req.staffId, req.readerId],
+  );
+  const paymentId = rows[0]!.id;
+
+  const stripe = getStripe();
+  const intent = await stripe.paymentIntents.create(
+    {
+      amount: bill.totalDueCents,
+      currency: 'usd',
+      payment_method_types: ['card_present'],
+      capture_method: 'automatic',
+      metadata: { kind: 'reader', paymentId, appointmentId: req.appointmentId },
+    },
+    onAccount(account),
+  );
+  await db.query('UPDATE payments SET stripe_payment_intent_id = $2 WHERE id = $1', [paymentId, intent.id]);
+  await stripe.terminal.readers.processPaymentIntent(req.readerId, { payment_intent: intent.id }, onAccount(account));
+  return { paymentId };
+}
+
 export async function cancelPendingPayment(db: Db, paymentId: string, status: Extract<PaymentStatus, 'failed' | 'cancelled'>) {
   await db.query(`UPDATE payments SET status = $2 WHERE id = $1 AND status = 'pending'`, [paymentId, status]);
 }

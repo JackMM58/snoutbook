@@ -21,12 +21,16 @@ export function CheckoutPage() {
   const navigate = useNavigate();
   const [tipCents, setTipCents] = useState(0);
   const [customTip, setCustomTip] = useState('');
-  const [method, setMethod] = useState<PaymentMethod>('payment_link');
+  const [method, setMethod] = useState<PaymentMethod>('card_reader');
+  const [readerId, setReaderId] = useState('');
   const [error, setError] = useState<string>();
   const [busy, setBusy] = useState(false);
   const [notice, setNotice] = useState<string>();
 
   const checkout = useApi<CheckoutView>(`/appointments/${appointmentId}/checkout?tipCents=${tipCents}`);
+  const readers = useApi<{ readers: { id: string; label: string; status: string | null }[] }>(
+    method === 'card_reader' ? '/card-readers' : null,
+  );
 
   if (checkout.loading && !checkout.data) return <Loading />;
   if (!checkout.data) return <ErrorNote error={checkout.error ?? 'Checkout not available'} />;
@@ -164,6 +168,7 @@ export function CheckoutPage() {
               <div className="segmented-control" role="tablist">
                 {(
                   [
+                    ['card_reader', 'Card reader'],
                     ['payment_link', 'Text a link'],
                     ['cash', 'Cash'],
                   ] as const
@@ -173,6 +178,19 @@ export function CheckoutPage() {
                   </button>
                 ))}
               </div>
+              {method === 'card_reader' && (
+                <Field label="Reader">
+                  <select value={readerId} onChange={(e) => setReaderId(e.target.value)}>
+                    <option value="">Choose a reader</option>
+                    {(readers.data?.readers ?? []).map((r) => (
+                      <option key={r.id} value={r.id} disabled={r.status === 'offline'}>
+                        {r.label}
+                        {r.status === 'offline' ? ' (offline)' : ''}
+                      </option>
+                    ))}
+                  </select>
+                </Field>
+              )}
               {pending ? (
                 <div className="pending-payment">
                   <p>Waiting for the {pending.method === 'card_reader' ? 'card reader' : 'client to pay the link'}…</p>

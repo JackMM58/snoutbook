@@ -14,6 +14,7 @@ export interface BusinessRow {
   rebookAfterWeeks: number | null;
   stripeAccountId: string | null;
   stripeCustomerId: string | null;
+  stripeTerminalLocationId: string | null;
 }
 
 const COLUMNS = `
@@ -22,6 +23,7 @@ const COLUMNS = `
   rebook_after_weeks AS "rebookAfterWeeks",
   stripe_account_id AS "stripeAccountId",
   stripe_customer_id AS "stripeCustomerId",
+  stripe_terminal_location_id AS "stripeTerminalLocationId",
   email`;
 
 export async function getBusiness(db: Db, id: string): Promise<BusinessRow> {

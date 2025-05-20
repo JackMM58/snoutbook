@@ -3,11 +3,14 @@ import { z } from 'zod';
 import { getPool } from '../db';
 import { auth } from '../lib/auth';
 import { handle, notFound } from '../lib/errors';
+import { getBusiness } from '../services/businesses';
 import {
   cancelPendingPayment,
   getCheckout,
+  listCardReaders,
   recordCashPayment,
   sendPaymentLink,
+  startReaderPayment,
 } from '../services/checkout';
 
 export const checkoutRouter = Router();
@@ -25,6 +28,7 @@ checkoutRouter.get(
 const paymentBody = z.discriminatedUnion('method', [
   z.object({ method: z.literal('cash'), tipCents: z.number().int().min(0) }),
   z.object({ method: z.literal('payment_link'), tipCents: z.number().int().min(0) }),
+  z.object({ method: z.literal('card_reader'), tipCents: z.number().int().min(0), readerId: z.string().startsWith('tmr_') }),
 ]);
 
 checkoutRouter.post(
@@ -41,6 +45,9 @@ checkoutRouter.post(
       case 'payment_link':
         res.status(201).json({ status: 'pending', ...(await sendPaymentLink(getPool(), request)) });
         return;
+      case 'card_reader':
+        res.status(201).json({ status: 'pending', ...(await startReaderPayment(getPool(), { ...request, readerId: body.readerId })) });
+        return;
     }
   }),
 );
@@ -55,5 +62,13 @@ checkoutRouter.post(
     if (rows.length === 0) throw notFound('Payment');
     await cancelPendingPayment(getPool(), req.params.id!, 'cancelled');
     res.status(204).end();
+  }),
+);
+
+checkoutRouter.get(
+  '/card-readers',
+  handle(async (req, res) => {
+    const business = await getBusiness(getPool(), auth(req).businessId);
+    res.json({ readers: await listCardReaders(business) });
   }),
 );

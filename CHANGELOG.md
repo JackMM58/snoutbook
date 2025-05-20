@@ -2,6 +2,11 @@
 
 Customer-facing changes, newest first. Dates are when a release reached every account.
 
+## 2025.05 — 2025-05-20
+
+### Added
+- **In-person card payments** with Stripe card readers. Pick a reader at checkout and the total, tip included, is sent straight to it.
+
 ## 2025.02 — 2025-02-18
 
 ### Added

@@ -39,6 +39,15 @@ async function onCheckoutExpired(session: Stripe.Checkout.Session) {
   }
 }
 
+async function onPaymentIntent(intent: Stripe.PaymentIntent, succeeded: boolean) {
+  if (intent.metadata.kind !== 'reader' || !intent.metadata.paymentId) return;
+  if (succeeded) {
+    await withTransaction((tx) => finalizePayment(tx, intent.metadata.paymentId!));
+  } else {
+    await cancelPendingPayment(getPool(), intent.metadata.paymentId, 'failed');
+  }
+}
+
 stripeWebhookRouter.post(
   '/',
   handle(async (req, res) => {
@@ -56,6 +65,12 @@ stripeWebhookRouter.post(
         break;
       case 'checkout.session.expired':
         await onCheckoutExpired(event.data.object);
+        break;
+      case 'payment_intent.succeeded':
+        await onPaymentIntent(event.data.object, true);
+        break;
+      case 'payment_intent.payment_failed':
+        await onPaymentIntent(event.data.object, false);
         break;
       default:
         break;
