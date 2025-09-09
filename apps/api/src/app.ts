@@ -5,6 +5,7 @@ import { appointmentsRouter } from './routes/appointments';
 import { authRouter } from './routes/auth';
 import { checkoutRouter } from './routes/checkout';
 import { clientsRouter } from './routes/clients';
+import { icalRouter } from './routes/ical';
 import { petsRouter } from './routes/pets';
 import { publicBookingRouter } from './routes/publicBooking';
 import { reportsRouter } from './routes/reports';
@@ -29,6 +30,7 @@ export function createApp() {
     res.json({ ok: true });
   });
 
+  app.use('/ical', icalRouter);
   app.use('/api/auth', authRouter);
   app.use('/api/public', publicBookingRouter);
 

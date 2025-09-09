@@ -1,10 +1,12 @@
 import { Router } from 'express';
 import { z } from 'zod';
 import { PLANS, type StaffMember } from '@snoutbook/shared';
+import { getConfig } from '../config';
 import { getPool, withTransaction } from '../db';
 import { auth, hashPassword, requireRole } from '../lib/auth';
 import { handle, HttpError, notFound } from '../lib/errors';
 import { getBusiness } from '../services/businesses';
+import { newFeedToken } from '../services/ical';
 
 export const staffRouter = Router();
 
@@ -102,5 +104,29 @@ staffRouter.put(
       }
     });
     res.status(204).end();
+  }),
+);
+
+/** The signed-in staff member's calendar feed URL. Creates the token on first use. */
+staffRouter.get(
+  '/me/calendar-feed',
+  handle(async (req, res) => {
+    const { staffId } = auth(req);
+    const { rows } = await getPool().query<{ token: string }>(
+      `UPDATE staff SET ical_token = COALESCE(ical_token, $2) WHERE id = $1 RETURNING ical_token AS token`,
+      [staffId, newFeedToken()],
+    );
+    res.json({ url: `${getConfig().API_BASE_URL}/ical/${rows[0]!.token}.ics` });
+  }),
+);
+
+/** Issues a new feed URL; the old one stops working. */
+staffRouter.post(
+  '/me/calendar-feed/rotate',
+  handle(async (req, res) => {
+    const { staffId } = auth(req);
+    const token = newFeedToken();
+    await getPool().query('UPDATE staff SET ical_token = $2 WHERE id = $1', [staffId, token]);
+    res.json({ url: `${getConfig().API_BASE_URL}/ical/${token}.ics` });
   }),
 );

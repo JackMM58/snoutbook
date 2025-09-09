@@ -2,6 +2,11 @@
 
 Customer-facing changes, newest first. Dates are when a release reached every account.
 
+## 2025.09 — 2025-09-09
+
+### Added
+- **Calendar feed**: subscribe to your appointments from Google Calendar or any calendar app (read-only iCal). Find your link in Settings → Business.
+
 ## 2025.05 — 2025-05-20
 
 ### Added

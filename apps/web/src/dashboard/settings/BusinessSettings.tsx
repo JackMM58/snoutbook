@@ -6,6 +6,7 @@ import { Button, Card, ErrorNote, Field, Loading } from '../../components/ui';
 
 export function BusinessSettings() {
   const { data, error } = useApi<{ settings: Settings }>('/settings');
+  const feed = useApi<{ url: string }>('/staff/me/calendar-feed');
   const [form, setForm] = useState<Settings>();
   const [deposit, setDeposit] = useState('');
   const [saveError, setSaveError] = useState<string>();
@@ -114,6 +115,10 @@ export function BusinessSettings() {
         )}
       </Card>
 
+      <Card title="Calendar feed">
+        <p className="muted">Subscribe to your appointments in Google Calendar or any calendar app. Changes show up within an hour.</p>
+        {feed.data && <input className="mono" readOnly value={feed.data.url} onFocus={(e) => e.target.select()} />}
+      </Card>
     </>
   );
 }
