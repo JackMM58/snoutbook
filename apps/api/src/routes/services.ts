@@ -1,9 +1,9 @@
 import { Router } from 'express';
 import { z } from 'zod';
-import type { Service } from '@snoutbook/shared';
+import { addOnPriceError, type AddOn, type Service } from '@snoutbook/shared';
 import { getPool } from '../db';
 import { auth, requireRole } from '../lib/auth';
-import { handle, notFound } from '../lib/errors';
+import { handle, HttpError, notFound } from '../lib/errors';
 
 export const servicesRouter = Router();
 
@@ -56,5 +56,45 @@ servicesRouter.put(
     );
     if (!rows[0]) throw notFound('Service');
     res.json({ service: rows[0] });
+  }),
+);
+
+servicesRouter.get(
+  '/add-ons',
+  handle(async (req, res) => {
+    const { rows } = await getPool().query<AddOn>(
+      `SELECT id, key, label, price_cents AS "priceCents", active FROM add_ons WHERE business_id = $1 ORDER BY label`,
+      [auth(req).businessId],
+    );
+    res.json({ addOns: rows });
+  }),
+);
+
+const addOnBody = z.object({
+  priceCents: z.number().int(),
+  active: z.boolean(),
+});
+
+servicesRouter.put(
+  '/add-ons/:id',
+  requireRole('owner', 'manager'),
+  handle(async (req, res) => {
+    const { businessId } = auth(req);
+    const body = addOnBody.parse(req.body);
+    const db = getPool();
+    const { rows: existing } = await db.query<Pick<AddOn, 'key'>>('SELECT key FROM add_ons WHERE id = $1 AND business_id = $2', [
+      req.params.id,
+      businessId,
+    ]);
+    if (!existing[0]) throw notFound('Add-on');
+    const problem = addOnPriceError(existing[0].key, body.priceCents);
+    if (problem) throw new HttpError(422, problem, 'bad_price');
+
+    const { rows } = await db.query<AddOn>(
+      `UPDATE add_ons SET price_cents = $3, active = $4 WHERE id = $1 AND business_id = $2
+       RETURNING id, key, label, price_cents AS "priceCents", active`,
+      [req.params.id, businessId, body.priceCents, body.active],
+    );
+    res.json({ addOn: rows[0] });
   }),
 );

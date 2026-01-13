@@ -5,10 +5,12 @@ import { auth } from '../lib/auth';
 import { handle, notFound } from '../lib/errors';
 import { getBusiness } from '../services/businesses';
 import {
+  addAddOn,
   cancelPendingPayment,
   getCheckout,
   listCardReaders,
   recordCashPayment,
+  removeAddOn,
   sendPaymentLink,
   startReaderPayment,
 } from '../services/checkout';
@@ -22,6 +24,24 @@ checkoutRouter.get(
   handle(async (req, res) => {
     const { tipCents } = tipQuery.parse(req.query);
     res.json(await getCheckout(getPool(), auth(req).businessId, req.params.id!, tipCents));
+  }),
+);
+
+checkoutRouter.post(
+  '/appointments/:id/add-ons',
+  handle(async (req, res) => {
+    const { businessId, staffId } = auth(req);
+    const { addOnId } = z.object({ addOnId: z.string().uuid() }).parse(req.body);
+    const line = await addAddOn(getPool(), staffId, businessId, req.params.id!, addOnId);
+    res.status(201).json({ line });
+  }),
+);
+
+checkoutRouter.delete(
+  '/appointments/:id/add-ons/:lineId',
+  handle(async (req, res) => {
+    await removeAddOn(getPool(), auth(req).businessId, req.params.id!, req.params.lineId!);
+    res.status(204).end();
   }),
 );
 

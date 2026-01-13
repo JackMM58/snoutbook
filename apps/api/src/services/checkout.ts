@@ -82,6 +82,25 @@ function assertCheckoutOpen(appt: AppointmentRow) {
   }
 }
 
+export async function addAddOn(db: Db, staffId: string, businessId: string, appointmentId: string, addOnId: string): Promise<AddOnLine> {
+  const appt = await getAppointment(db, businessId, appointmentId);
+  assertCheckoutOpen(appt);
+  const { rows } = await db.query<AddOnLine>(
+    `INSERT INTO appointment_add_ons (appointment_id, add_on_id, label, price_cents, added_by)
+     SELECT $1, id, label, price_cents, $4 FROM add_ons WHERE id = $2 AND business_id = $3 AND active
+     RETURNING id, add_on_id AS "addOnId", label, price_cents AS "priceCents"`,
+    [appointmentId, addOnId, businessId, staffId],
+  );
+  if (!rows[0]) throw notFound('Add-on');
+  return rows[0];
+}
+
+export async function removeAddOn(db: Db, businessId: string, appointmentId: string, lineId: string): Promise<void> {
+  const appt = await getAppointment(db, businessId, appointmentId);
+  assertCheckoutOpen(appt);
+  await db.query('DELETE FROM appointment_add_ons WHERE id = $1 AND appointment_id = $2', [lineId, appointmentId]);
+}
+
 async function hasPendingPayment(db: Db, appointmentId: string): Promise<boolean> {
   const { rows } = await db.query(`SELECT 1 FROM payments WHERE appointment_id = $1 AND status = 'pending'`, [appointmentId]);
   return rows.length > 0;

@@ -2,6 +2,11 @@
 
 Customer-facing changes, newest first. Dates are when a release reached every account.
 
+## 2026.01 — 2026-01-13
+
+### Added
+- **Add-ons at checkout**: de-shed treatment, nail grind, teeth brushing, flea bath and matting fee. Set your prices in Settings → Services. The matting fee can be set from $15 to $40.
+
 ## 2025.09 — 2025-09-09
 
 ### Added

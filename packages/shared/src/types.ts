@@ -22,6 +22,8 @@ export type DepositStatus = 'pending' | 'paid' | 'expired' | 'applied';
 export type PaymentMethod = 'card_reader' | 'payment_link' | 'cash';
 export type PaymentStatus = 'pending' | 'succeeded' | 'failed' | 'cancelled';
 
+export type AddOnKey = 'de_shed' | 'nail_grind' | 'teeth_brushing' | 'flea_bath' | 'matting_fee';
+
 export interface BusinessSummary {
   id: string;
   name: string;
@@ -133,6 +135,14 @@ export interface Van {
   name: string;
   staffId: string | null;
   bufferMinutes: number;
+}
+
+export interface AddOn {
+  id: string;
+  key: AddOnKey;
+  label: string;
+  priceCents: number;
+  active: boolean;
 }
 
 export interface SmsUsageSummary {

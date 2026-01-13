@@ -1,5 +1,6 @@
 // Seeds a local database with one Salon business so the dashboard and booking page
 // have something to show. Refuses to run against production.
+import { ADD_ON_CATALOG } from '@snoutbook/shared';
 import { getConfig } from '../config';
 import { closePool, withTransaction } from '../db';
 import { hashPassword } from '../lib/auth';
@@ -58,6 +59,15 @@ async function main() {
         `INSERT INTO services (business_id, name, prices_cents, durations_minutes, sort_order) VALUES ($1, $2, $3, $4, $5)`,
         [businessId, s.name, JSON.stringify(s.prices), JSON.stringify(s.durations), i],
       );
+    }
+
+    for (const addOn of ADD_ON_CATALOG) {
+      await tx.query('INSERT INTO add_ons (business_id, key, label, price_cents) VALUES ($1, $2, $3, $4)', [
+        businessId,
+        addOn.key,
+        addOn.label,
+        addOn.defaultPriceCents,
+      ]);
     }
 
     const clients = [

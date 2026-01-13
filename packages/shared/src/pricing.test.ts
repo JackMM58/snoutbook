@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest';
+import { addOnPriceError } from './addOns';
 import { computeBill, priceRange, servicePrice, sizeForWeight, tipFromPercent } from './pricing';
 
 const fullGroom = {
@@ -59,5 +60,17 @@ describe('computeBill', () => {
 
   it('suggests tips from the subtotal', () => {
     expect(tipFromPercent(8700, 20)).toBe(1740);
+  });
+});
+
+describe('addOnPriceError', () => {
+  it('keeps the matting fee between $15 and $40', () => {
+    expect(addOnPriceError('matting_fee', 1000)).toMatch(/at least/);
+    expect(addOnPriceError('matting_fee', 4500)).toMatch(/at most/);
+    expect(addOnPriceError('matting_fee', 2500)).toBeNull();
+  });
+
+  it('has no range for other add-ons', () => {
+    expect(addOnPriceError('nail_grind', 500)).toBeNull();
   });
 });

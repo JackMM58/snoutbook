@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import { z } from 'zod';
 import type { PoolClient } from 'pg';
-import { PLANS, TRIAL_DAYS, type StaffRole } from '@snoutbook/shared';
+import { ADD_ON_CATALOG, PLANS, TRIAL_DAYS, type StaffRole } from '@snoutbook/shared';
 import { getPool, withTransaction } from '../db';
 import { auth, hashPassword, requireStaff, signSession, verifyPassword } from '../lib/auth';
 import { handle, HttpError } from '../lib/errors';
@@ -68,6 +68,14 @@ authRouter.post(
         `INSERT INTO staff (business_id, name, email, role, password_hash) VALUES ($1, $2, $3, 'owner', $4) RETURNING id`,
         [business!.id, body.name, body.email, await hashPassword(body.password)],
       );
+      for (const addOn of ADD_ON_CATALOG) {
+        await tx.query('INSERT INTO add_ons (business_id, key, label, price_cents) VALUES ($1, $2, $3, $4)', [
+          business!.id,
+          addOn.key,
+          addOn.label,
+          addOn.defaultPriceCents,
+        ]);
+      }
       return { businessId: business!.id, staffId: staff!.id };
     });
 

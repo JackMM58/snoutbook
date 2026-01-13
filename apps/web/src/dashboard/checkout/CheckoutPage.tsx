@@ -28,6 +28,7 @@ export function CheckoutPage() {
   const [notice, setNotice] = useState<string>();
 
   const checkout = useApi<CheckoutView>(`/appointments/${appointmentId}/checkout?tipCents=${tipCents}`);
+  const catalog = useApi<{ addOns: AddOn[] }>('/add-ons');
   const readers = useApi<{ readers: { id: string; label: string; status: string | null }[] }>(
     method === 'card_reader' ? '/card-readers' : null,
   );
@@ -51,6 +52,11 @@ export function CheckoutPage() {
       setBusy(false);
     }
   }
+
+  const addAddOn = (addOnId: string) =>
+    act(() => api(`/appointments/${appointmentId}/add-ons`, { method: 'POST', json: { addOnId } }));
+  const removeAddOn = (lineId: string) =>
+    act(() => api(`/appointments/${appointmentId}/add-ons/${lineId}`, { method: 'DELETE' }));
 
   const pay = () =>
     act(async () => {
@@ -131,6 +137,17 @@ export function CheckoutPage() {
 
         {open && (
           <div>
+            <Card title="Add-ons">
+              <div className="btn-row">
+                {(catalog.data?.addOns ?? [])
+                  .filter((a) => a.active)
+                  .map((a) => (
+                    <Button key={a.id} variant="secondary" disabled={busy} onClick={() => addAddOn(a.id)}>
+                      + {a.label} {formatCents(a.priceCents)}
+                    </Button>
+                  ))}
+              </div>
+            </Card>
 
             <Card title="Tip">
               <div className="btn-row">
