@@ -24,3 +24,8 @@ as the appointment change.
 - Polling adds up to `WORKER_POLL_MS` of delay, which is fine for reminders.
 - Running more than one worker needs row locking on claim. Revisit (SKIP LOCKED, or a real
   queue) if we ever need more than one worker.
+
+## Update, 2026-02-03
+
+We now run two worker processes. Claims use `FOR UPDATE SKIP LOCKED`, and jobs left in
+`running` for more than 10 minutes are put back as `pending`.

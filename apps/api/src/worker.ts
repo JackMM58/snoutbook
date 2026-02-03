@@ -1,7 +1,7 @@
 import { setTimeout as sleep } from 'node:timers/promises';
 import { getConfig } from './config';
 import { closePool } from './db';
-import { claimDueJobs, completeJob, failJob, type Job, type JobKind } from './services/jobs';
+import { claimDueJobs, completeJob, failJob, releaseStuckJobs, type Job, type JobKind } from './services/jobs';
 import { sendAppointmentReminder, sendRebookReminder } from './services/reminders';
 
 const handlers: Record<JobKind, (job: Job) => Promise<void>> = {
@@ -31,9 +31,15 @@ async function tick(batchSize: number): Promise<number> {
 async function main(): Promise<void> {
   const { WORKER_POLL_MS, WORKER_BATCH_SIZE } = getConfig();
   console.log(`[worker] started, polling every ${WORKER_POLL_MS}ms`);
+  let lastReap = 0;
 
   while (!stopping) {
     try {
+      if (Date.now() - lastReap > 60_000) {
+        const released = await releaseStuckJobs();
+        if (released > 0) console.warn(`[worker] released ${released} stuck job(s)`);
+        lastReap = Date.now();
+      }
       const handled = await tick(WORKER_BATCH_SIZE);
       if (handled < WORKER_BATCH_SIZE) await sleep(WORKER_POLL_MS);
     } catch (err) {

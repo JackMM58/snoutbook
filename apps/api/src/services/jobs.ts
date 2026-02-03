@@ -55,6 +55,7 @@ export async function claimDueJobs(limit: number): Promise<Job[]> {
          WHERE status = 'pending' AND run_at <= now()
          ORDER BY run_at
          LIMIT $1
+         FOR UPDATE SKIP LOCKED
       )
       RETURNING ${JOB_COLUMNS}`,
     [limit],
@@ -82,4 +83,14 @@ export async function failJob(job: Job, error: unknown): Promise<void> {
       WHERE id = $1`,
     [job.id, message, job.attempts * job.attempts],
   );
+}
+
+/** Puts back jobs left 'running' by a worker that died mid-batch. */
+export async function releaseStuckJobs(olderThanMinutes = 10): Promise<number> {
+  const { rowCount } = await getPool().query(
+    `UPDATE scheduled_jobs SET status = 'pending', locked_at = NULL, updated_at = now()
+      WHERE status = 'running' AND locked_at < now() - make_interval(mins => $1)`,
+    [olderThanMinutes],
+  );
+  return rowCount ?? 0;
 }
