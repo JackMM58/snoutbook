@@ -60,6 +60,7 @@ appointmentsRouter.post(
 
 const patchBody = z.object({
   startsAt: z.string().datetime({ offset: true }).optional(),
+  groomerId: z.string().uuid().optional(),
   notes: z.string().max(2000).nullable().optional(),
 });
 
@@ -70,6 +71,7 @@ appointmentsRouter.patch(
     const body = patchBody.parse(req.body);
     const appointment = await updateAppointment(businessId, req.params.id!, {
       startsAt: body.startsAt ? new Date(body.startsAt) : undefined,
+      groomerId: body.groomerId,
       notes: body.notes,
     });
     res.json({ appointment });

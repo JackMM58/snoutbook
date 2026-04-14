@@ -138,6 +138,7 @@ export async function createAppointment(tx: PoolClient, input: NewAppointment): 
 
 export interface AppointmentPatch {
   startsAt?: Date;
+  groomerId?: string;
   notes?: string | null;
 }
 
@@ -149,26 +150,36 @@ export async function updateAppointment(businessId: string, id: string, patch: A
     }
 
     const startsAt = patch.startsAt ?? current.startsAt;
+    const groomerId = patch.groomerId ?? current.groomerId;
     const timeChanged = startsAt.getTime() !== current.startsAt.getTime();
+    const groomerChanged = groomerId !== current.groomerId;
 
     let endsAt = current.endsAt;
-    if (timeChanged) {
+    let vanId = current.vanId;
+    if (groomerChanged) {
+      await assertGroomer(tx, businessId, groomerId);
+      vanId = await vanForGroomer(tx, groomerId);
+    }
+    if (timeChanged || groomerChanged) {
       endsAt = new Date(startsAt.getTime() + (current.endsAt.getTime() - current.startsAt.getTime()));
-      await lockGroomer(tx, current.groomerId);
-      await assertFree(tx, current.groomerId, startsAt, endsAt, id);
+      await lockGroomer(tx, groomerId);
+      await assertFree(tx, groomerId, startsAt, endsAt, id);
     }
 
     const { rows } = await tx.query<AppointmentRow>(
       `UPDATE appointments AS a
-          SET starts_at = $3, ends_at = $4, notes = $5, updated_at = now()
+          SET starts_at = $3, ends_at = $4, groomer_id = $5, van_id = $6, notes = $7, updated_at = now()
         WHERE a.id = $1 AND a.business_id = $2
         RETURNING ${APPOINTMENT_COLUMNS}`,
-      [id, businessId, startsAt, endsAt, patch.notes !== undefined ? patch.notes : current.notes],
+      [id, businessId, startsAt, endsAt, groomerId, vanId, patch.notes !== undefined ? patch.notes : current.notes],
     );
     const updated = rows[0]!;
 
-    if (timeChanged) {
+    // Pending reminders carry the old time and groomer name in their payload.
+    if (timeChanged || groomerChanged) {
       await cancelPendingReminders(tx, id);
+    }
+    if (timeChanged) {
       await scheduleAppointmentReminders(tx, updated);
     }
 

@@ -2,6 +2,15 @@
 
 Customer-facing changes, newest first. Dates are when a release reached every account.
 
+## 2026.04 — 2026-04-14
+
+### Added
+- New calendar with a **week view**.
+- **Drag and drop** to move appointments to another time, or to another groomer's column on Salon.
+
+### Fixed
+- Long client names no longer push appointment cards out of their column.
+
 ## 2026.01 — 2026-01-13
 
 ### Added
