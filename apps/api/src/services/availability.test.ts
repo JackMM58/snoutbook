@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { zonedToUtc } from '@snoutbook/shared';
-import { computeSlots } from './availability';
+import { computeSlots, firstAvailable } from './availability';
 
 const TZ = 'America/Los_Angeles';
 const DATE = '2026-06-02';
@@ -57,5 +57,19 @@ describe('computeSlots', () => {
 
   it('returns nothing when the visit is longer than the shift', () => {
     expect(computeSlots({ ...base, durationMinutes: 240 })).toEqual([]);
+  });
+});
+
+describe('firstAvailable', () => {
+  it('offers each time once, to the first free groomer in calendar order', () => {
+    const slots = firstAvailable(
+      ['kim', 'luis'],
+      new Map([
+        ['kim', [at('10:00')]],
+        ['luis', [at('09:00'), at('10:00')]],
+      ]),
+    );
+    expect(slots.map((s) => s.groomerId)).toEqual(['luis', 'kim']);
+    expect(slots.map((s) => s.startsAt)).toEqual([new Date(at('09:00')).toISOString(), new Date(at('10:00')).toISOString()]);
   });
 });

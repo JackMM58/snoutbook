@@ -86,6 +86,7 @@ export function AppointmentPanel({ appointment: a, timeZone, groomerName, onStat
               <dt>Groomer</dt>
               <dd>
                 {groomerName}
+                {a.anyGroomer && <span className="muted"> · booked as first available</span>}
               </dd>
             </>
           )}

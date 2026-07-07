@@ -34,6 +34,9 @@ export function TimeStep({ slug, business, service, size, groomers, selected, on
 
       {groomers.length > 0 && (
         <div className="groomer-picker" role="radiogroup" aria-label="Groomer">
+          <button type="button" role="radio" aria-checked={groomerChoice === 'any'} onClick={() => setGroomerChoice('any')}>
+            First available
+          </button>
           {groomers.map((g) => (
             <button key={g.id} type="button" role="radio" aria-checked={groomerChoice === g.id} onClick={() => setGroomerChoice(g.id)}>
               {g.name}

@@ -98,6 +98,7 @@ export function DetailsStep({ slug, business, service, pet, slot, groomerName, r
             <dt>Groomer</dt>
             <dd>
               {groomerName}
+              {slot.groomerChoice === 'any' && <span className="muted"> (first available)</span>}
             </dd>
           </div>
         )}

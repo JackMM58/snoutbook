@@ -44,6 +44,13 @@ export interface ChosenSlot {
 
 type Step = 'service' | 'pet' | 'time' | 'details';
 
+const STEPS: { key: Step; label: string }[] = [
+  { key: 'service', label: 'Service' },
+  { key: 'pet', label: 'Pet' },
+  { key: 'time', label: 'Time' },
+  { key: 'details', label: 'Details' },
+];
+
 export function petSize(pet: PetChoice): Size {
   return pet.kind === 'existing' ? pet.size : sizeForWeight(pet.weightLbs);
 }
@@ -67,6 +74,7 @@ export function BookingPage() {
   }
 
   const { business, services, groomers } = data;
+  const stepIndex = STEPS.findIndex((s) => s.key === step);
 
   return (
     <div className="booking">
@@ -74,6 +82,20 @@ export function BookingPage() {
         <h1>{business.name}</h1>
         <p className="muted">Book a groom online{business.phone ? ` · ${business.phone}` : ''}</p>
       </header>
+
+      <ol className="stepper" aria-label="Booking steps">
+        {STEPS.map((s, i) => (
+          <li key={s.key} className={i === stepIndex ? 'current' : i < stepIndex ? 'done' : ''}>
+            {i < stepIndex ? (
+              <button type="button" onClick={() => setStep(s.key)}>
+                {s.label}
+              </button>
+            ) : (
+              <span>{s.label}</span>
+            )}
+          </li>
+        ))}
+      </ol>
 
       <main className="booking-body">
         {step === 'service' && (

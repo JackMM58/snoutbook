@@ -204,7 +204,7 @@ publicBookingRouter.post(
       const pet = await resolvePet(tx, business.id, clientId, body.pet);
 
       // Re-check against live availability so stale pages and hand-built requests can't
-      // book outside working hours.
+      // book outside working hours. For "first available" this also picks the groomer.
       const slots = await findAvailability(tx, business, {
         date: zonedParts(startsAt, business.timezone).date,
         serviceId: body.serviceId,
@@ -222,6 +222,7 @@ publicBookingRouter.post(
         groomerId: slot.groomerId,
         startsAt,
         source: 'online',
+        anyGroomer: body.groomerId === 'any' && plan.groomerColumns,
       });
       return { appointment, petName: pet.name };
     });

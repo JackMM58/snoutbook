@@ -2,6 +2,14 @@
 
 Customer-facing changes, newest first. Dates are when a release reached every account.
 
+## 2026.07 — 2026-07-07
+
+### Added
+- Salon booking pages can offer **First available** instead of a specific groomer. The appointment goes to the first groomer free at that time, and the calendar marks it so the front desk knows it can be moved.
+
+### Changed
+- Redesigned booking page: a step bar, a two-week day picker, and a clearer summary before you confirm.
+
 ## 2026.04 — 2026-04-14
 
 ### Added

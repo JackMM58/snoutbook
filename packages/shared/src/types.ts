@@ -116,6 +116,7 @@ export interface Appointment {
   size: Size;
   quotedPriceCents: number;
   source: AppointmentSource;
+  anyGroomer: boolean;
   notes: string | null;
 }
 

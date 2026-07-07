@@ -29,6 +29,7 @@ export interface AppointmentRow {
   size: Size;
   quotedPriceCents: number;
   source: AppointmentSource;
+  anyGroomer: boolean;
   notes: string | null;
   completedAt: Date | null;
 }
@@ -38,6 +39,7 @@ export const APPOINTMENT_COLUMNS = `
   a.service_id AS "serviceId", a.groomer_id AS "groomerId", a.van_id AS "vanId",
   a.starts_at AS "startsAt", a.ends_at AS "endsAt", a.status, a.size,
   a.quoted_price_cents AS "quotedPriceCents", a.source,
+  a.any_groomer AS "anyGroomer",
   a.notes, a.completed_at AS "completedAt"`;
 
 export async function getAppointment(db: Db, businessId: string, id: string, forUpdate = false): Promise<AppointmentRow> {
@@ -84,6 +86,7 @@ export interface NewAppointment {
   groomerId: string;
   startsAt: Date;
   source: AppointmentSource;
+  anyGroomer?: boolean;
   notes?: string | null;
 }
 
@@ -113,8 +116,8 @@ export async function createAppointment(tx: PoolClient, input: NewAppointment): 
   const { rows } = await tx.query<AppointmentRow>(
     `INSERT INTO appointments AS a
        (business_id, client_id, pet_id, service_id, groomer_id, van_id, starts_at, ends_at, size,
-        quoted_price_cents, source, notes)
-     VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12)
+        quoted_price_cents, source, any_groomer, notes)
+     VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13)
      RETURNING ${APPOINTMENT_COLUMNS}`,
     [
       input.businessId,
@@ -128,6 +131,7 @@ export async function createAppointment(tx: PoolClient, input: NewAppointment): 
       size,
       servicePrice(service, size),
       input.source,
+      input.anyGroomer ?? false,
       input.notes ?? null,
     ],
   );

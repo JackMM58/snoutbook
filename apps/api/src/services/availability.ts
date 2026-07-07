@@ -47,11 +47,27 @@ export function computeSlots(input: SlotInput): number[] {
   return slots;
 }
 
+/**
+ * "First available": each start time is offered once, going to the first groomer in
+ * calendar order who is free then.
+ */
+export function firstAvailable(groomerOrder: string[], slotsByGroomer: Map<string, number[]>): AvailabilitySlot[] {
+  const chosen = new Map<number, string>();
+  for (const groomerId of groomerOrder) {
+    for (const start of slotsByGroomer.get(groomerId) ?? []) {
+      if (!chosen.has(start)) chosen.set(start, groomerId);
+    }
+  }
+  return [...chosen.entries()]
+    .sort(([a], [b]) => a - b)
+    .map(([start, groomerId]) => ({ startsAt: new Date(start).toISOString(), groomerId }));
+}
+
 export interface AvailabilityQuery {
   date: string;
   serviceId: string;
   size: Size;
-  /** A staff id, or 'any'. */
+  /** A staff id, or 'any' for first available. */
   groomerId: string;
 }
 
@@ -121,7 +137,5 @@ export async function findAvailability(db: Db, business: BusinessRow, q: Availab
     );
   }
 
-  return groomers.flatMap((g) =>
-    (slotsByGroomer.get(g.id) ?? []).map((start) => ({ startsAt: new Date(start).toISOString(), groomerId: g.id })),
-  );
+  return firstAvailable(groomerIds, slotsByGroomer);
 }
