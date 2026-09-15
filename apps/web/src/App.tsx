@@ -11,6 +11,7 @@ import { BusinessSettings } from './dashboard/settings/BusinessSettings';
 import { ServiceAreaSettings } from './dashboard/settings/ServiceAreaSettings';
 import { ServicesSettings } from './dashboard/settings/ServicesSettings';
 import { SettingsPage } from './dashboard/settings/SettingsPage';
+import { SmsUsagePage } from './dashboard/settings/SmsUsagePage';
 
 export function App() {
   return (
@@ -30,6 +31,7 @@ export function App() {
           <Route path="business" element={<BusinessSettings />} />
           <Route path="services" element={<ServicesSettings />} />
           <Route path="service-area" element={<ServiceAreaSettings />} />
+          <Route path="sms-usage" element={<SmsUsagePage />} />
         </Route>
       </Route>
       <Route path="*" element={<Navigate to="/app" replace />} />

@@ -10,6 +10,7 @@ export function SettingsPage() {
         <NavLink to="business">Business</NavLink>
         <NavLink to="services">Services</NavLink>
         {plan.serviceArea && <NavLink to="service-area">Service area</NavLink>}
+        <NavLink to="sms-usage">SMS usage</NavLink>
       </nav>
       <Outlet />
     </div>

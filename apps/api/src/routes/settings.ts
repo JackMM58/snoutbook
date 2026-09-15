@@ -6,6 +6,7 @@ import { getPool, withTransaction } from '../db';
 import { auth, requirePlan, requireRole } from '../lib/auth';
 import { handle, HttpError, notFound } from '../lib/errors';
 import { getBusiness, type BusinessRow } from '../services/businesses';
+import { getMonthlyUsage } from '../services/smsUsage';
 import { getStripe } from '../vendors/stripe';
 
 export const settingsRouter = Router();
@@ -83,6 +84,15 @@ settingsRouter.post(
       return_url: `${appUrl}/app/settings/business?stripe=connected`,
     });
     res.json({ url: link.url });
+  }),
+);
+
+settingsRouter.get(
+  '/sms-usage',
+  handle(async (req, res) => {
+    const db = getPool();
+    const business = await getBusiness(db, auth(req).businessId);
+    res.json({ usage: await getMonthlyUsage(db, business) });
   }),
 );
 

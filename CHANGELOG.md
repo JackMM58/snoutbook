@@ -2,6 +2,11 @@
 
 Customer-facing changes, newest first. Dates are when a release reached every account.
 
+## 2026.09 — 2026-09-15
+
+### Added
+- **SMS usage** in Settings: texts sent so far this month against the number included in your plan, and any overage at $0.04 a text.
+
 ## 2026.07 — 2026-07-07
 
 ### Added
