@@ -17,7 +17,7 @@ See [docs/architecture.md](docs/architecture.md) for how the pieces fit together
 
 ## Getting started
 
-You need Node 20 (`nvm use`) and Postgres 15+.
+You need Node 22 (`nvm use`) and Postgres 15+.
 
 ```sh
 cp .env.example .env          # fill in test-mode keys
