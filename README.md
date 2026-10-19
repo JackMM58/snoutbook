@@ -11,6 +11,7 @@ apps/web         React app: public booking page (/book/:slug) and dashboard (/ap
 packages/shared  Types, plans, size bands, pricing and add-on helpers used by both
 db/migrations    Plain SQL migrations, applied in filename order
 docs/            Architecture notes and decision records
+website/         Marketing site: static HTML and CSS, no build step
 ```
 
 See [docs/architecture.md](docs/architecture.md) for how the pieces fit together.

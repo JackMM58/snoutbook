@@ -1,0 +1,486 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Snoutbook · Booking and client software for dog groomers</title>
+<meta name="description" content="Snoutbook gives dog groomers a booking page, a calendar, text and email reminders, deposits and pet profiles. Start a 14-day free trial, no card needed.">
+<meta name="theme-color" content="#FBF7F1">
+<meta property="og:site_name" content="Snoutbook">
+<meta property="og:title" content="Snoutbook · Booking and client software for dog groomers">
+<meta property="og:description" content="Snoutbook gives dog groomers a booking page, a calendar, text and email reminders, deposits and pet profiles. Start a 14-day free trial, no card needed.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2032%2032%22%3E%3Crect%20width%3D%2232%22%20height%3D%2232%22%20rx%3D%229%22%20fill%3D%22%231F5C4D%22%2F%3E%3Cpath%20d%3D%22M18%200h5v8l-2.5-1.9L18%208z%22%20fill%3D%22%23F0A35B%22%2F%3E%3Cpath%20d%3D%22M16%2010.5c5.2%200%208.8%202%208.8%205.3%200%204.2-4.3%208.4-8.8%208.4s-8.8-4.2-8.8-8.4c0-3.3%203.6-5.3%208.8-5.3z%22%20fill%3D%22%23FBF7F1%22%2F%3E%3Cellipse%20cx%3D%2212.6%22%20cy%3D%2215.6%22%20rx%3D%222%22%20ry%3D%221.35%22%20transform%3D%22rotate(-18%2012.6%2015.6)%22%20fill%3D%22%231F5C4D%22%2F%3E%3Cellipse%20cx%3D%2219.4%22%20cy%3D%2215.6%22%20rx%3D%222%22%20ry%3D%221.35%22%20transform%3D%22rotate(18%2019.4%2015.6)%22%20fill%3D%22%231F5C4D%22%2F%3E%3Cpath%20d%3D%22M16%2018.6v2.6%22%20stroke%3D%22%231F5C4D%22%20stroke-width%3D%221.6%22%20stroke-linecap%3D%22round%22%2F%3E%3C%2Fsvg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400..700&family=Inter:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="styles.css">
+<script src="main.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+<header class="site-header">
+  <div class="container header-inner">
+    <a class="brand" href="index.html" aria-current="page">
+      <svg class="brand-mark" viewBox="0 0 32 32" aria-hidden="true" focusable="false"><rect width="32" height="32" rx="9" fill="#1F5C4D"/><path d="M18 0h5v8l-2.5-1.9L18 8z" fill="#F0A35B"/><path d="M16 10.5c5.2 0 8.8 2 8.8 5.3 0 4.2-4.3 8.4-8.8 8.4s-8.8-4.2-8.8-8.4c0-3.3 3.6-5.3 8.8-5.3z" fill="#FBF7F1"/><ellipse cx="12.6" cy="15.6" rx="2" ry="1.35" transform="rotate(-18 12.6 15.6)" fill="#1F5C4D"/><ellipse cx="19.4" cy="15.6" rx="2" ry="1.35" transform="rotate(18 19.4 15.6)" fill="#1F5C4D"/><path d="M16 18.6v2.6" stroke="#1F5C4D" stroke-width="1.6" stroke-linecap="round"/></svg>
+      <span>Snoutbook</span>
+    </a>
+    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav">
+      <svg class="icon-open" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true" focusable="false"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+      <svg class="icon-close" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true" focusable="false"><path d="M18 6 6 18M6 6l12 12"/></svg>
+      Menu
+    </button>
+    <nav id="site-nav" class="site-nav" aria-label="Main">
+      <ul class="nav-links">
+        <li><a href="features.html">Features</a></li>
+        <li><a href="mobile-groomers.html">Mobile groomers</a></li>
+        <li><a href="pricing.html">Pricing</a></li>
+        <li><a href="changelog.html">Changelog</a></li>
+        <li><a href="help.html">Help</a></li>
+        <li><a href="about.html">About</a></li>
+      </ul>
+      <div class="nav-cta">
+        <a class="btn btn-secondary" href="about.html#contact">Book a demo</a>
+        <a class="btn btn-primary" href="pricing.html">Start free trial</a>
+      </div>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+<section class="hero">
+  <div class="container hero-grid">
+    <div class="hero-copy">
+      <p class="eyebrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="11" cy="4" r="2"/><circle cx="18" cy="8" r="2"/><circle cx="20" cy="16" r="2"/><path d="M9 10a5 5 0 0 1 5 5v3.5a3.5 3.5 0 0 1-6.84 1.045Q6.52 17.48 4.46 16.84A3.5 3.5 0 0 1 5.5 10Z"/></svg> Booking and client software for dog groomers</p>
+      <h1>Less time on the phone. More time with the dogs.</h1>
+      <p class="lead">Snoutbook gives your grooming business a booking page clients can use at any hour, a calendar that keeps up with your day, text and email reminders, deposits, and a profile for every pet.</p>
+      <div class="btn-row">
+        <a class="btn btn-primary btn-lg" href="pricing.html">Start free trial</a>
+        <a class="btn btn-secondary btn-lg" href="about.html#contact">Book a demo</a>
+      </div>
+      <ul class="hero-note">
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M20 6 9 17l-5-5"/></svg> 14-day free trial</li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M20 6 9 17l-5-5"/></svg> No card needed</li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M20 6 9 17l-5-5"/></svg> Plans from $29 a month</li>
+      </ul>
+    </div>
+
+    <div class="hero-visual" role="img" aria-label="The Snoutbook day calendar showing appointments for three groomers, a deposit notification, and a text message reminder sent to a client">
+      <div class="app-window cal">
+        <div class="window-bar">
+          <span class="dots"><i></i><i></i><i></i></span>
+          <span class="window-title">Thursday, October 22</span>
+          <span class="seg"><span class="on">Day</span><span>Week</span></span>
+        </div>
+        <div class="cal-heads">
+          <div></div>
+          <div><span class="av av-coral">R</span><span class="name">Rosa</span><span class="count">3</span></div>
+          <div><span class="av av-sky">T</span><span class="name">Theo</span><span class="count">3</span></div>
+          <div><span class="av av-lilac">I</span><span class="name">Imani</span><span class="count">3</span></div>
+        </div>
+        <div class="cal-grid">
+          <span class="cal-hr" style="grid-row:1">8 AM</span>
+          <span class="cal-hr" style="grid-row:3">9 AM</span>
+          <span class="cal-hr" style="grid-row:5">10 AM</span>
+          <span class="cal-hr" style="grid-row:7">11 AM</span>
+          <span class="cal-hr" style="grid-row:9">12 PM</span>
+          <span class="cal-hr" style="grid-row:11">1 PM</span>
+          <span class="cal-lane" style="grid-column:2"></span>
+          <span class="cal-lane" style="grid-column:3"></span>
+          <span class="cal-lane" style="grid-column:4"></span>
+
+          <div class="appt c-apricot" style="grid-column:2;grid-row:1/5">
+            <span class="appt-name">Biscuit</span>
+            <span class="appt-meta">Full groom · M</span>
+            <span class="appt-tag"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M20 6 9 17l-5-5"/></svg> $20 deposit</span>
+          </div>
+          <div class="appt c-sky" style="grid-column:2;grid-row:6/8">
+            <span class="appt-name">Pepper</span>
+            <span class="appt-meta">Bath &amp; brush · S</span>
+          </div>
+          <div class="appt c-pine" style="grid-column:2;grid-row:10/13">
+            <span class="appt-name">Moose</span>
+            <span class="appt-meta">Bath &amp; de-shed · XL</span>
+            <span class="appt-tag"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg> Reminded</span>
+          </div>
+
+          <div class="appt c-lilac" style="grid-column:3;grid-row:2/4">
+            <span class="appt-name">Luna</span>
+            <span class="appt-meta">Puppy first groom</span>
+          </div>
+          <div class="appt c-coral" style="grid-column:3;grid-row:5/9">
+            <span class="appt-name">Waffles</span>
+            <span class="appt-meta">Full groom · L</span>
+            <span class="appt-tag"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M20 6 9 17l-5-5"/></svg> $20 deposit</span>
+          </div>
+          <div class="appt c-mint" style="grid-column:3;grid-row:11/13">
+            <span class="appt-name">Olive</span>
+            <span class="appt-meta">Face, feet &amp; tidy</span>
+          </div>
+
+          <div class="appt c-sky" style="grid-column:4;grid-row:1/3">
+            <span class="appt-name">Ziggy</span>
+            <span class="appt-meta">Bath &amp; brush · S</span>
+          </div>
+          <div class="appt c-apricot" style="grid-column:4;grid-row:4/8">
+            <span class="appt-name">Juniper</span>
+            <span class="appt-meta">Full groom · M</span>
+            <span class="appt-tag"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg> Reminded</span>
+          </div>
+          <div class="appt appt-break" style="grid-column:4;grid-row:9/11">
+            <span class="appt-name">Lunch</span>
+          </div>
+          <div class="appt c-pine" style="grid-column:4;grid-row:11/13">
+            <span class="appt-name">Bear</span>
+            <span class="appt-meta">Bath &amp; brush · XL</span>
+          </div>
+
+          <span class="cal-now" style="grid-row:7"></span>
+        </div>
+      </div>
+      <div class="toast hero-toast">
+        <span class="toast-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M20 6 9 17l-5-5"/></svg></span>
+        <span><b>Deposit paid · $20</b><span>Waffles, Thu 10:00 AM with Theo</span></span>
+      </div>
+      <div class="hero-sms">
+        <div class="sms">
+          <div class="sms-head">
+            <span class="av av-coral">R</span>
+            <span class="sms-who"><b>Rosa</b><small>Text message</small></span>
+          </div>
+          <span class="sms-time">Tue, Oct 20 · 8:00 AM</span>
+          <div class="bubble">Hi Erin! Biscuit is booked with Rosa on Thu, Oct 22 at 8:00 AM. Your $20 deposit is paid. Reply STOP to opt out.</div>
+          <span class="sms-time">Thu, Oct 22 · 6:00 AM</span>
+          <div class="bubble">See you soon! Biscuit's full groom starts at 8:00 AM today.</div>
+          <div class="sms-foot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg> Also sent by email</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section-tight" aria-label="Snoutbook in numbers">
+  <div class="container">
+    <ul class="proof">
+      <li><strong>1,400</strong><span>grooming businesses across the US run on Snoutbook</span></li>
+      <li><strong>2,600</strong><span>groomers book, remind and check out with it</span></li>
+      <li><strong>Since 2023</strong><span>built in Portland, Oregon, with groomers at the table</span></li>
+    </ul>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <div class="section-head center">
+      <p class="eyebrow">Built for the grooming table</p>
+      <h2>From “can I book?” to “see you in six weeks”</h2>
+      <p class="lead">Snoutbook takes care of booking, reminders and the paperwork around every visit, so your day is about the dogs.</p>
+    </div>
+
+    <div class="feature-row">
+      <div class="feature-copy">
+        <p class="eyebrow eyebrow-apricot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg> Booking page</p>
+        <h3>A booking page that takes bookings while you groom</h3>
+        <p>Share one link. Clients pick a service, choose their pet or add a new one, and take an open time. No more phone tag with wet hands.</p>
+        <ul class="checks">
+          <li><span><strong>Prices by size.</strong> Set a base price and time for small, medium, large and extra-large dogs.</span></li>
+          <li><span><strong>A groomer or “first available”.</strong> On Salon, clients choose who grooms their dog.</span></li>
+          <li><span><strong>New clients add their own details.</strong> Name, phone and email, plus an address for mobile visits.</span></li>
+        </ul>
+        <a class="text-link" href="features.html#booking">See the booking page <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></a>
+      </div>
+      <div class="stage" role="img" aria-label="A client booking a full groom for Biscuit on Snoutbook's mobile booking page, with a $20 deposit">
+        <div class="phone">
+          <div class="bk-head">
+            <span class="av av-coral">R</span>
+            <span><span class="bk-title">Book with Rosa</span><span class="bk-sub">Dog grooming · Southeast Portland</span></span>
+          </div>
+          <div class="bk-progress"><i class="on"></i><i class="on"></i><i></i></div>
+
+          <p class="bk-label">Service</p>
+          <div class="bk-service">
+            <span><b>Full groom</b><small>Medium · about 2 hours</small></span>
+            <strong>$75</strong>
+          </div>
+
+          <p class="bk-label">Pet</p>
+          <div class="bk-chips">
+            <span class="bk-chip is-on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="11" cy="4" r="2"/><circle cx="18" cy="8" r="2"/><circle cx="20" cy="16" r="2"/><path d="M9 10a5 5 0 0 1 5 5v3.5a3.5 3.5 0 0 1-6.84 1.045Q6.52 17.48 4.46 16.84A3.5 3.5 0 0 1 5.5 10Z"/></svg> Biscuit</span>
+            <span class="bk-chip">Maple</span>
+            <span class="bk-chip is-add">+ Add a pet</span>
+          </div>
+
+          <p class="bk-label">Groomer</p>
+          <div class="bk-chips">
+            <span class="bk-chip is-on">First available</span>
+            <span class="bk-chip">Rosa</span>
+            <span class="bk-chip">Theo</span>
+          </div>
+
+          <p class="bk-label">October</p>
+          <div class="bk-days">
+            <span class="bk-day"><small>Mon</small><b>19</b></span>
+            <span class="bk-day"><small>Tue</small><b>20</b></span>
+            <span class="bk-day"><small>Wed</small><b>21</b></span>
+            <span class="bk-day is-on"><small>Thu</small><b>22</b></span>
+            <span class="bk-day"><small>Fri</small><b>23</b></span>
+          </div>
+
+          <p class="bk-label">Thursday times</p>
+          <div class="bk-times">
+            <span class="bk-time is-off">8:00</span>
+            <span class="bk-time is-on">10:00</span>
+            <span class="bk-time">11:30</span>
+            <span class="bk-time">1:00</span>
+            <span class="bk-time is-off">2:30</span>
+            <span class="bk-time">3:00</span>
+          </div>
+
+          <div class="bk-deposit"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg><span><b>$20 deposit today.</b> It comes off your final bill.</span></div>
+          <span class="bk-cta">Continue</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="feature-row reverse">
+      <div class="feature-copy">
+        <p class="eyebrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg> Reminders &amp; deposits</p>
+        <h3>Reminders and deposits cut no-shows</h3>
+        <p>Every client gets a text and an email 48 hours before the appointment and again 2 hours before. Ask for a deposit when they book online, and a booking means they’re coming.</p>
+        <ul class="checks">
+          <li><span><strong>Automatic reminders</strong> by text and email. Nothing to send by hand.</span></li>
+          <li><span><strong>Deposits through Stripe.</strong> Set a fixed amount, like $20, and it comes off the final bill.</span></li>
+          <li><span><strong>Rebook reminders</strong> six weeks after each visit, or on the schedule you choose.</span></li>
+        </ul>
+        <a class="text-link" href="features.html#reminders">How reminders work <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></a>
+      </div>
+      <div class="stage stage-pine" role="img" aria-label="Two text message reminders for Biscuit's appointment, sent 48 hours and 2 hours before">
+        <div class="sms">
+          <div class="sms-head">
+            <span class="av av-coral">R</span>
+            <span class="sms-who"><b>Rosa</b><small>Text message</small></span>
+          </div>
+          <span class="sms-time">Tue, Oct 20 · 8:00 AM</span>
+          <div class="bubble">Hi Erin! Biscuit is booked with Rosa on Thu, Oct 22 at 8:00 AM. Your $20 deposit is paid. Reply STOP to opt out.</div>
+          <span class="sms-time">Thu, Oct 22 · 6:00 AM</span>
+          <div class="bubble">See you soon! Biscuit's full groom starts at 8:00 AM today.</div>
+          <div class="sms-foot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg> Also sent by email</div>
+        </div>
+        <div class="toast">
+          <span class="toast-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></span>
+          <span><b>Deposit received · $20</b><span>Taken off Biscuit’s bill at checkout</span></span>
+        </div>
+      </div>
+    </div>
+
+    <div class="feature-row">
+      <div class="feature-copy">
+        <p class="eyebrow eyebrow-apricot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="11" cy="4" r="2"/><circle cx="18" cy="8" r="2"/><circle cx="20" cy="16" r="2"/><path d="M9 10a5 5 0 0 1 5 5v3.5a3.5 3.5 0 0 1-6.84 1.045Q6.52 17.48 4.46 16.84A3.5 3.5 0 0 1 5.5 10Z"/></svg> Pet profiles</p>
+        <h3>Every dog, on file</h3>
+        <p>Breed, weight, coat type, birthday and the notes that matter, with the photos you take on the table. It’s all there before the dog is.</p>
+        <ul class="checks">
+          <li><span><strong>Vaccine records</strong> for rabies, DHPP and bordetella, with expiry dates and the certificate attached.</span></li>
+          <li><span><strong>A red Expired badge</strong> on the profile when a record runs out.</span></li>
+          <li><span><strong>Temperament notes</strong> that travel with the dog from visit to visit.</span></li>
+        </ul>
+        <a class="text-link" href="features.html#pets">Pet profiles and vaccine records <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></a>
+      </div>
+      <div class="stage stage-sand" role="img" aria-label="Biscuit's pet profile with breed, weight, notes and three vaccine records, one marked Expired">
+        <div class="pet">
+          <div class="pet-head">
+            <span class="pet-photo"><svg viewBox="0 0 64 64" aria-hidden="true" focusable="false"><rect width="64" height="64" fill="#FDF1E3"/><path d="M15 20c-5 6-6.5 17-2 24 3 4.5 9 2.5 10-2.5l2.2-15.5c.4-5.5-6.2-9.6-10.2-6z" fill="#C98A4B"/><path d="M49 20c5 6 6.5 17 2 24-3 4.5-9 2.5-10-2.5l-2.2-15.5c-.4-5.5 6.2-9.6 10.2-6z" fill="#C98A4B"/><ellipse cx="32" cy="34" rx="15.5" ry="16.5" fill="#E8B57A"/><ellipse cx="32" cy="43" rx="9.5" ry="7.5" fill="#F6DDBA"/><circle cx="25.5" cy="32" r="2.4" fill="#2A211C"/><circle cx="38.5" cy="32" r="2.4" fill="#2A211C"/><circle cx="26.3" cy="31.2" r=".8" fill="#fff"/><circle cx="39.3" cy="31.2" r=".8" fill="#fff"/><path d="M28.3 38.6h7.4c.9 0 1.3 1 .7 1.6l-3.6 3.3a1.2 1.2 0 0 1-1.6 0l-3.6-3.3c-.6-.6-.2-1.6.7-1.6z" fill="#1F1915"/><path d="M32 43.8v2.4" stroke="#1F1915" stroke-width="1.4" stroke-linecap="round"/></svg></span>
+            <span class="pet-id">
+              <span class="pet-name">Biscuit</span>
+              <span class="pet-meta">Goldendoodle · 42 lb · Born March 2021</span>
+            </span>
+          </div>
+          <div class="chips">
+            <span class="chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="6" cy="6" r="3"/><path d="M8.12 8.12 12 12"/><path d="M20 4 8.12 15.88"/><circle cx="6" cy="18" r="3"/><path d="M14.8 14.8 20 20"/></svg> Curly coat</span>
+            <span class="chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M12.59 2.59A2 2 0 0 0 11.17 2H4a2 2 0 0 0-2 2v7.17a2 2 0 0 0 .59 1.42l8.7 8.7a2.43 2.43 0 0 0 3.42 0l6.58-6.58a2.43 2.43 0 0 0 0-3.42z"/><circle cx="7.5" cy="7.5" r="1"/></svg> Size M</span>
+            <span class="chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z"/><circle cx="12" cy="13" r="3"/></svg> 12 photos</span>
+          </div>
+          <div class="pet-note"><b>Notes:</b> Nervous with the dryer, use low heat. Loves ear scratches. Owner prefers a teddy-bear face.</div>
+
+          <div class="pet-section">
+            <p class="mini-label">Vaccines</p>
+            <ul class="vax">
+              <li>
+                <span class="vax-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="m18 2 4 4"/><path d="m17 7 3-3"/><path d="M19 9 8.7 19.3c-1 1-2.5 1-3.4 0l-.6-.6c-1-1-1-2.5 0-3.4L15 5"/><path d="m9 11 4 4"/><path d="m5 19-3 3"/><path d="m14 4 6 6"/></svg></span>
+                <span><span class="vax-name">Rabies</span><span class="vax-date">Expires Jun 12, 2027</span></span>
+                <span class="badge badge-ok"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M20 6 9 17l-5-5"/></svg> Current</span>
+              </li>
+              <li>
+                <span class="vax-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="m18 2 4 4"/><path d="m17 7 3-3"/><path d="M19 9 8.7 19.3c-1 1-2.5 1-3.4 0l-.6-.6c-1-1-1-2.5 0-3.4L15 5"/><path d="m9 11 4 4"/><path d="m5 19-3 3"/><path d="m14 4 6 6"/></svg></span>
+                <span><span class="vax-name">DHPP</span><span class="vax-date">Expires Feb 3, 2027</span></span>
+                <span class="badge badge-ok"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M20 6 9 17l-5-5"/></svg> Current</span>
+              </li>
+              <li class="is-expired">
+                <span class="vax-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="m18 2 4 4"/><path d="m17 7 3-3"/><path d="M19 9 8.7 19.3c-1 1-2.5 1-3.4 0l-.6-.6c-1-1-1-2.5 0-3.4L15 5"/><path d="m9 11 4 4"/><path d="m5 19-3 3"/><path d="m14 4 6 6"/></svg></span>
+                <span><span class="vax-name">Bordetella</span><span class="vax-date">Expired Sep 30, 2026</span></span>
+                <span class="badge badge-expired"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"/><path d="M12 9v4M12 17h.01"/></svg> Expired</span>
+              </li>
+            </ul>
+            <div class="file"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="M16 13H8M16 17H8M10 9H8"/></svg><span>rabies-certificate-2024.pdf</span><small>Uploaded</small></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section section-alt">
+  <div class="container">
+    <div class="section-head">
+      <p class="eyebrow">And the rest of the day</p>
+      <h2>The tools behind a smooth grooming day</h2>
+    </div>
+    <div class="card-grid">
+      <div class="card">
+        <span class="icon-tile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg></span>
+        <h3>A calendar that keeps up</h3>
+        <p>Day and week views. Drag an appointment to move it. Salons get one column per groomer.</p>
+      </div>
+      <div class="card">
+        <span class="icon-tile apricot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg></span>
+        <h3>Checkout at the table</h3>
+        <p>Take cards with a Stripe card reader or a payment link, record cash, and let clients add a tip.</p>
+      </div>
+      <div class="card">
+        <span class="icon-tile sky"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M14 18V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v11a1 1 0 0 0 1 1h2"/><path d="M15 18H9"/><path d="M19 18h2a1 1 0 0 0 1-1v-3.65a1 1 0 0 0-.22-.62l-3.48-4.35A1 1 0 0 0 17.52 8H14"/><circle cx="17" cy="18" r="2"/><circle cx="7" cy="18" r="2"/></svg></span>
+        <h3>Ready for the van</h3>
+        <p>Service-area ZIP codes, gate and parking notes, and buffer time between stops.</p>
+        <a class="text-link" href="mobile-groomers.html">For mobile groomers <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></a>
+      </div>
+      <div class="card">
+        <span class="icon-tile lilac"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M3 3v18h18"/><path d="M18 17V9"/><path d="M13 17V5"/><path d="M8 17v-3"/></svg></span>
+        <h3>Reports for salons</h3>
+        <p>Revenue by day, week and month, your rebook rate and your no-show count.</p>
+      </div>
+      <div class="card">
+        <span class="icon-tile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/><path d="M8 16H3v5"/></svg></span>
+        <h3>Google Calendar feed</h3>
+        <p>A one-way feed puts your Snoutbook appointments next to the rest of your life.</p>
+      </div>
+      <div class="card">
+        <span class="icon-tile apricot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></span>
+        <h3>Texts you can count</h3>
+        <p>See how many texts your business has sent this month, right in Settings.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <div class="section-head center">
+      <p class="eyebrow">From the grooming table</p>
+      <h2>Groomers who got their evenings back</h2>
+    </div>
+    <div class="quotes">
+      <figure class="quote">
+        <blockquote><p>I used to answer the phone with a dryer in one hand. Now my regulars book from the link, and I just check the calendar at lunch.</p></blockquote>
+        <figcaption><span class="av av-apricot">KM</span><span><strong>Kelsey M.</strong><span>Solo groomer, Spokane</span></span></figcaption>
+      </figure>
+      <figure class="quote">
+        <blockquote><p>The gate notes are the thing. Whoever drives the second van knows about the sticky latch and the cat before they pull up.</p></blockquote>
+        <figcaption><span class="av av-sky">AT</span><span><strong>Andre T.</strong><span>Mobile groomer, Sacramento</span></span></figcaption>
+      </figure>
+      <figure class="quote">
+        <blockquote><p>Every groomer has their own column, and I can see the whole day from the front desk. The vaccine records replaced a filing cabinet.</p></blockquote>
+        <figcaption><span class="av av-lilac">JP</span><span><strong>Jolene P.</strong><span>Salon manager, Richmond</span></span></figcaption>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<section class="section section-alt">
+  <div class="container">
+    <div class="section-head center">
+      <p class="eyebrow">Pricing</p>
+      <h2>A plan for the way you groom</h2>
+      <p class="lead">Every plan starts with a 14-day free trial. No card needed.</p>
+    </div>
+    <div class="plans">
+      <article class="plan plan-teaser">
+        <div class="plan-head"><h3>Solo</h3><span class="plan-who">1 groomer</span></div>
+        <p class="plan-price"><strong>$29</strong><span>/month</span></p>
+        <p class="plan-desc">Booking page, calendar, reminders, deposits and pet profiles for a one-person studio.</p>
+        <a class="btn btn-secondary" href="pricing.html">See Solo</a>
+      </article>
+      <article class="plan plan-teaser plan-featured">
+        <div class="plan-head"><h3>Mobile</h3><span class="plan-who">Up to 2 vans</span></div>
+        <p class="plan-price"><strong>$59</strong><span>/month</span></p>
+        <p class="plan-desc">Everything in Solo, plus service-area ZIP codes, gate and parking notes, and buffer time between stops.</p>
+        <a class="btn btn-primary" href="pricing.html">See Mobile</a>
+      </article>
+      <article class="plan plan-teaser">
+        <div class="plan-head"><h3>Salon</h3><span class="plan-who">Up to 8 groomers</span></div>
+        <p class="plan-price"><strong>$99</strong><span>/month</span></p>
+        <p class="plan-desc">Everything in Solo, plus a calendar column for each groomer, staff roles and reports.</p>
+        <a class="btn btn-secondary" href="pricing.html">See Salon</a>
+      </article>
+    </div>
+    <p class="fine-print"><a class="text-link" href="pricing.html">Compare all plans <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></a></p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <div class="cta-band">
+      <div>
+        <h2>Try Snoutbook free for 14 days</h2>
+        <p>Add your services, share your booking link, and watch your week fill in. No card needed.</p>
+      </div>
+      <div class="btn-row">
+        <a class="btn btn-light btn-lg" href="pricing.html">Start free trial</a>
+        <a class="btn btn-outline-light btn-lg" href="about.html#contact">Book a demo</a>
+      </div>
+      <svg class="paws" viewBox="0 0 220 170" fill="currentColor" aria-hidden="true" focusable="false"><defs><g id="paw-print"><ellipse cx="20" cy="30" rx="14" ry="12"/><ellipse cx="3" cy="12" rx="5" ry="7" transform="rotate(-20 3 12)"/><ellipse cx="14" cy="2" rx="5" ry="7"/><ellipse cx="27" cy="2" rx="5" ry="7"/><ellipse cx="38" cy="12" rx="5" ry="7" transform="rotate(20 38 12)"/></g></defs><use href="#paw-print" transform="translate(16 112) rotate(-28)"/><use href="#paw-print" transform="translate(70 70) rotate(-18)"/><use href="#paw-print" transform="translate(120 96) rotate(-24)"/><use href="#paw-print" transform="translate(170 46) rotate(-14)"/></svg>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a class="brand" href="index.html">
+          <svg class="brand-mark" viewBox="0 0 32 32" aria-hidden="true" focusable="false"><rect width="32" height="32" rx="9" fill="#1F5C4D"/><path d="M18 0h5v8l-2.5-1.9L18 8z" fill="#F0A35B"/><path d="M16 10.5c5.2 0 8.8 2 8.8 5.3 0 4.2-4.3 8.4-8.8 8.4s-8.8-4.2-8.8-8.4c0-3.3 3.6-5.3 8.8-5.3z" fill="#FBF7F1"/><ellipse cx="12.6" cy="15.6" rx="2" ry="1.35" transform="rotate(-18 12.6 15.6)" fill="#1F5C4D"/><ellipse cx="19.4" cy="15.6" rx="2" ry="1.35" transform="rotate(18 19.4 15.6)" fill="#1F5C4D"/><path d="M16 18.6v2.6" stroke="#1F5C4D" stroke-width="1.6" stroke-linecap="round"/></svg>
+          <span>Snoutbook</span>
+        </a>
+        <p>Booking and client software for dog groomers. Less time on the phone. More time with the dogs.</p>
+      </div>
+      <nav class="footer-col" aria-labelledby="footer-product">
+        <h2 id="footer-product">Product</h2>
+        <ul>
+          <li><a href="features.html">Features</a></li>
+          <li><a href="mobile-groomers.html">Mobile groomers</a></li>
+          <li><a href="pricing.html">Pricing</a></li>
+          <li><a href="changelog.html">Changelog</a></li>
+        </ul>
+      </nav>
+      <nav class="footer-col" aria-labelledby="footer-company">
+        <h2 id="footer-company">Company</h2>
+        <ul>
+          <li><a href="about.html">About</a></li>
+          <li><a href="about.html#team">Team</a></li>
+          <li><a href="about.html#contact">Contact</a></li>
+        </ul>
+      </nav>
+      <nav class="footer-col" aria-labelledby="footer-start">
+        <h2 id="footer-start">Get started</h2>
+        <ul>
+          <li><a href="help.html">Help center</a></li>
+          <li><a href="pricing.html">Start free trial</a></li>
+          <li><a href="about.html#contact">Book a demo</a></li>
+        </ul>
+      </nav>
+    </div>
+    <div class="footer-base">
+      <p>© 2026 Snoutbook, Inc. · Portland, Oregon</p>
+      <p>Made for groomers, by people who love dogs.</p>
+    </div>
+  </div>
+</footer>
+</body>
+</html>
